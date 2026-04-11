@@ -1,0 +1,11 @@
+:host {
+  display: block;
+}
+
+.table-responsive {
+  min-height: 200px;
+}
+
+input.form-control {
+  min-width: 240px;
+}

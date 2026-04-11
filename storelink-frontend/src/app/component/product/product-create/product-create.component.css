@@ -1,0 +1,12 @@
+.is-invalid {
+  border-color: #dc3545;
+}
+
+.invalid-feedback {
+  display: block;
+}
+
+form {
+  max-width: 600px;
+  margin: auto;
+}

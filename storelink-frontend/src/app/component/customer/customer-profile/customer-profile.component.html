@@ -1,0 +1,12 @@
+<div *ngIf="!loading && customer" class="card mt-4 shadow-sm p-3">
+  <h4 class="text-primary mb-3">Mi Perfil</h4>
+
+  <p><strong>Nombre:</strong> {{ customer.name }}</p>
+  <p><strong>Correo Electrónico:</strong> {{ customer.email }}</p>
+  <p><strong>Teléfono:</strong> {{ customer.phone }}</p>
+</div>
+
+<div *ngIf="loading" class="text-center mt-4">
+  <div class="spinner-border text-primary" role="status"></div>
+  <p class="mt-2">Cargando perfil...</p>
+</div>

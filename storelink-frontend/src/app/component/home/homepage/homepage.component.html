@@ -1,0 +1,89 @@
+<div class="container my-4">
+  <div class="row">
+    <div *ngFor="let product of products" class="col-md-4 mb-4">
+      <div class="card h-100" [class.text-muted]="product.quantity === 0">
+        <img
+          [src]="product.imageUrl"
+          class="card-img-top"
+          [class.opacity-50]="product.quantity === 0"
+          alt="{{ product.productName }}"
+          height="300"
+          width="200"
+        />
+        <div class="card-body">
+          <h5 class="card-title">{{ product.productName }}</h5>
+          <p class="card-text">{{ product.description }}</p>
+
+          <p class="card-text">
+            <strong>Precio: </strong>
+            <span *ngIf="getDiscountForProduct(product); else normalPrice">
+              <del>S/ {{ product.price | number:'1.2-2' }}</del>
+              <strong>
+                S/ {{ getDiscountedPrice(product) | number:'1.2-2' }}
+              </strong>
+              <span class="badge bg-success">
+                {{ getDiscountForProduct(product) }}% DESCUENTO
+              </span>
+              <br />
+              <small class="text-muted">Descuento aplicado en la facturación</small>
+            </span>
+            <ng-template #normalPrice>
+              S/ {{ product.price | number:'1.2-2' }}
+            </ng-template>
+          </p>
+
+          <p class="card-text" *ngIf="product.quantity === 0">
+            <em>No Disponible</em>
+          </p>
+
+          <div *ngIf="product.quantity > 0">
+            <button
+              *ngIf="!isInCart(product.productId!)"
+              class="btn btn-primary"
+              (click)="addToCart(product)"
+            >
+              Agregar al Carrito
+            </button>
+
+            <div
+              *ngIf="isInCart(product.productId!)"
+              class="d-flex align-items-center gap-2"
+            >
+              <button
+                class="btn btn-sm btn-secondary"
+                (click)="decrement(product.productId!)"
+              >
+                -
+              </button>
+
+              <!-- Show quantity -->
+              <span>{{ cart[product.productId!].quantity }}</span>
+
+              <button
+                class="btn btn-sm btn-secondary"
+                (click)="increment(product.productId!)"
+              >
+                +
+              </button>
+
+              <!-- Optionally show discounted price per unit -->
+              <span class="ms-2 text-success">
+                S/ {{
+                  cart[product.productId!].discountedPrice
+                    | number:'1.2-2'
+                }}
+              </span>
+
+              <button
+                class="btn btn-sm btn-danger"
+                (click)="removeFromCart(product.productId!)"
+              >
+                Eliminar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

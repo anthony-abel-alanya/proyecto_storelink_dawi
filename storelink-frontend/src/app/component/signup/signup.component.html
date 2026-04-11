@@ -1,0 +1,133 @@
+<div class="d-flex justify-content-center align-items-center vh-100 bg-light">
+  <div class="card p-4 shadow-lg" style="width: 420px">
+    <h3 class="text-center mb-4">Crear Cuenta</h3>
+
+    <form (ngSubmit)="onSubmit()" #signupForm="ngForm" novalidate>
+      <!-- Name -->
+      <div class="mb-3">
+        <label class="form-label">Nombre</label>
+        <input
+          type="text"
+          class="form-control"
+          name="name"
+          [(ngModel)]="newCustomer.name"
+          #name="ngModel"
+          required
+        />
+        <div
+          *ngIf="name.invalid && name.touched"
+          class="text-danger small mt-1"
+        >
+          El nombre es obligatorio.
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div class="mb-3">
+        <label class="form-label">Correo Electrónico</label>
+        <input
+          type="email"
+          class="form-control"
+          name="email"
+          [(ngModel)]="newCustomer.email"
+          #email="ngModel"
+          required
+          email
+        />
+        <div
+          *ngIf="email.invalid && email.touched"
+          class="text-danger small mt-1"
+        >
+          <div *ngIf="email.errors?.['required']">El correo electrónico es obligatorio.</div>
+          <div *ngIf="email.errors?.['email']">Formato de correo electrónico inválido.</div>
+        </div>
+      </div>
+
+      <!-- Phone -->
+      <div class="mb-3">
+        <label class="form-label">Teléfono</label>
+        <input
+          type="text"
+          class="form-control"
+          name="phone"
+          [(ngModel)]="newCustomer.phone"
+          #phone="ngModel"
+          required
+          pattern="^[0-9]{9}$"
+        />
+        <div
+          *ngIf="phone.invalid && phone.touched"
+          class="text-danger small mt-1"
+        >
+          <div *ngIf="phone.errors?.['required']">
+            El número de teléfono es obligatorio.
+          </div>
+          <div *ngIf="phone.errors?.['pattern']">
+            El número de teléfono debe tener exactamente 9 dígitos.
+          </div>
+        </div>
+      </div>
+
+      <!-- Password -->
+      <div class="mb-3">
+        <label class="form-label">Contraseña</label>
+        <input
+          type="password"
+          class="form-control"
+          name="password"
+          [(ngModel)]="password"
+          #passwordField="ngModel"
+          minlength="8"
+          required
+        />
+        <div
+          *ngIf="passwordField.invalid && passwordField.touched"
+          class="text-danger small mt-1"
+        >
+          <div *ngIf="passwordField.errors?.['required']">
+            La contraseña es obligatoria.
+          </div>
+          <div *ngIf="passwordField.errors?.['minlength']">
+            La contraseña debe tener al menos 8 caracteres.
+          </div>
+        </div>
+      </div>
+
+      <!-- Confirm Password -->
+      <div class="mb-3">
+        <label class="form-label">Confirmar Contraseña</label>
+        <input
+          type="password"
+          class="form-control"
+          name="confirmPassword"
+          [(ngModel)]="confirmPassword"
+          #confirmPasswordField="ngModel"
+          required
+        />
+        <div
+          *ngIf="confirmPasswordField.touched && !passwordsMatch()"
+          class="text-danger small mt-1"
+        >
+          Las contraseñas no coinciden.
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <button
+        type="submit"
+        class="btn btn-success w-100"
+        [disabled]="!signupForm.valid || !passwordsMatch()"
+      >
+        Registrarse
+      </button>
+
+      <!-- Messages -->
+      <div *ngIf="successMessage" class="text-success text-center mt-3">
+        {{ successMessage }}
+      </div>
+      <div *ngIf="errorMessage" class="text-danger text-center mt-3">
+        {{ errorMessage }}
+      </div>
+    </form>
+  </div>
+</div>

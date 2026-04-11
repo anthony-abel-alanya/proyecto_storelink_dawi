@@ -1,0 +1,16 @@
+.container {
+  max-width: 900px;
+}
+
+.card {
+  border-radius: 12px;
+}
+
+.card-header {
+  font-size: 1rem;
+}
+
+.table th,
+.table td {
+  vertical-align: middle;
+}

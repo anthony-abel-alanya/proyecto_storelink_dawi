@@ -1,0 +1,108 @@
+<div class="container my-5">
+  <h2 class="mb-4">Detalles de Pago</h2>
+
+  <form (ngSubmit)="submitPayment()" novalidate>
+    <div class="mb-3">
+      <label>Nombre del Titular de la Tarjeta</label>
+      <input
+        type="text"
+        class="form-control"
+        [(ngModel)]="payment.cardholderName"
+        name="cardholderName"
+        required
+      />
+    </div>
+
+    <div class="mb-3">
+      <label>Número de Tarjeta</label>
+      <input
+        type="text"
+        class="form-control"
+        [(ngModel)]="payment.cardNumber"
+        name="cardNumber"
+        maxlength="16"
+        required
+      />
+    </div>
+
+    <div class="row">
+      <div class="col-md-4 mb-3">
+        <label>Mes de Expiración</label>
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="payment.expiryMonth"
+          name="expiryMonth"
+          maxlength="2"
+          required
+        />
+      </div>
+      <div class="col-md-4 mb-3">
+        <label>Año de Expiración</label>
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="payment.expiryYear"
+          name="expiryYear"
+          maxlength="2"
+          required
+        />
+      </div>
+      <div class="col-md-4 mb-3">
+        <label>CVV</label>
+        <input
+          type="password"
+          class="form-control"
+          [(ngModel)]="payment.cvv"
+          name="cvv"
+          maxlength="3"
+          required
+        />
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label>OTP (para verificación)</label>
+      <input
+        type="text"
+        class="form-control"
+        [(ngModel)]="payment.otp"
+        name="otp"
+        maxlength="6"
+        required
+      />
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Dirección de Entrega</label>
+      <textarea
+        class="form-control"
+        [(ngModel)]="deliveryAddress"
+        name="deliveryAddress"
+        rows="3"
+        placeholder="Ingresa la dirección completa de entrega"
+        required
+      ></textarea>
+    </div>
+
+    <div class="mb-3">
+      <h5>Monto Total: S/ {{ totalAmount | number:'1.2-2' }}</h5>
+    </div>
+
+    <div *ngIf="errorMessage" class="alert alert-danger">
+      {{ errorMessage }}
+    </div>
+
+    <button type="submit" class="btn btn-success w-100" [disabled]="loading">
+      {{ loading ? "Procesando Pago..." : "Pagar Ahora" }}
+    </button>
+  </form>
+
+  <div *ngIf="orderId" class="alert alert-success mt-4">
+    Payment Successful! Your order has been placed successfully.
+    <br />
+    <strong>Order ID:</strong> {{ orderId }} <br />
+    <strong>Total Billed:</strong> {{ totalAmount | currency : "INR" }}
+    <strong>Delivery Address:</strong> {{ deliveryAddress }}
+  </div>
+</div>

@@ -1,0 +1,87 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary px-4 fixed-top">
+  <div class="container-fluid">
+    <!-- Left side: Home -->
+    <img
+      src="assets/storelink.png"
+      alt="StoreLink Logo"
+      width="40"
+      height="40"
+      class="me-2 rounded-circle border border-light"
+    />
+    <a class="navbar-brand" *ngIf="!isAdminLoggedIn()" routerLink="/home">
+      StoreLink</a
+    >
+
+    <a class="navbar-brand" *ngIf="isAdminLoggedIn()" routerLink="/admin-home">
+      StoreLink</a
+    >
+
+    <!-- Right side: Login/Signup or Profile dropdown -->
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <ul class="navbar-nav">
+        <!-- If not logged in -->
+        <li class="nav-item" *ngIf="!isLoggedIn()">
+          <a class="navbar-brand" routerLink="/login">Iniciar Sesión</a>
+        </li>
+        <li class="nav-item" *ngIf="!isLoggedIn()">
+          <a class="navbar-brand" routerLink="/signup">Registrarse</a>
+        </li>
+
+        <!-- If logged in -->
+        <li
+          class="nav-item position-relative me-3"
+          *ngIf="isCustomerLoggedIn()"
+        >
+          <a class="navbar-brand" routerLink="/cart">
+            <i class="bi bi-cart"></i> Carrito
+          </a>
+        </li>
+
+        <li class="nav-item dropdown" *ngIf="isLoggedIn()">
+          <a
+            class="navbar-brand dropdown-toggle"
+            href="#"
+            id="profileDropdown"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <i class="bi bi-person-circle"></i> Perfil
+          </a>
+          <ul
+            class="dropdown-menu dropdown-menu-end"
+            aria-labelledby="profileDropdown"
+          >
+            <li>
+              <a
+                class="dropdown-item"
+                *ngIf="!isAdminLoggedIn()"
+                routerLink="/profile"
+                ><i class="bi bi-person-fill"></i> Ver Perfil</a
+              >
+            </li>
+            <li>
+              <a
+                class="dropdown-item"
+                *ngIf="isCustomerLoggedIn()"
+                routerLink="/order-history"
+                ><i class="bi bi-clock-history"></i> Historial de Pedidos</a
+              >
+            </li>
+            <li>
+              <a class="dropdown-item" routerLink="/"
+                ><i class="bi bi-gear"></i> Configuración</a
+              >
+            </li>
+            <li><hr class="dropdown-divider" /></li>
+            <li>
+              <a class="dropdown-item text-danger" (click)="logout()"
+                ><i class="bi bi-box-arrow-right"></i> Cerrar Sesión</a
+              >
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
