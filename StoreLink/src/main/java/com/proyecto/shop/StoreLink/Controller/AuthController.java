@@ -1,7 +1,7 @@
 package com.proyecto.shop.StoreLink.Controller;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.proyecto.shop.StoreLink.Dto.AuthResponse;
 import com.proyecto.shop.StoreLink.Dto.LoginRequest;
 import com.proyecto.shop.StoreLink.Model.UserInfo;
 import com.proyecto.shop.StoreLink.Repository.IUserInfoRepository;
@@ -39,7 +40,7 @@ public class AuthController {
 	AuthenticationManager authenticationManager;
 
 	@PostMapping
-	public ResponseEntity<Map<String, Object>> validate(@RequestBody LoginRequest loginRequest) {
+	public ResponseEntity<AuthResponse> validate(@RequestBody LoginRequest loginRequest) {
 		logger.info("in authentication endpoint ....");
 		try {
 			Authentication authentication = authenticationManager.authenticate(
@@ -47,21 +48,29 @@ public class AuthController {
 
 			if (authentication.isAuthenticated()) {
 				UserInfo userEntity = userInfoDao.findByEmail(loginRequest.getEmail()).get();
-				Map<String, Object> responseData = new HashMap<>();
-				responseData.put("user", userEntity);
-				responseData.put("token", jwtService.generateToken(loginRequest.getEmail()));
-				return new ResponseEntity<>(responseData, HttpStatus.OK);
+				
+				// Extract roles (without exposing password)
+				List<String> roles = userEntity.getAllRoles().stream()
+						.map(role -> role.getRoleName())
+						.collect(Collectors.toList());
+				
+				// Create AuthResponse (no password exposed)
+				AuthResponse authResponse = new AuthResponse();
+				authResponse.setToken(jwtService.generateToken(loginRequest.getEmail()));
+				authResponse.setEmail(userEntity.getEmail());
+				authResponse.setRoles(roles);
+				
+				return new ResponseEntity<>(authResponse, HttpStatus.OK);
 			} else {
 				throw new UsernameNotFoundException("Invalid user request !");
 			}
 
 		} catch (BadCredentialsException e) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Invalid email or password"));
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		} catch (UsernameNotFoundException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "User not found"));
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body(Map.of("error", "Authentication failed: " + e.getMessage()));
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 
 	}

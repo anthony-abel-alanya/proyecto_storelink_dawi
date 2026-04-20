@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { ProductService } from 'src/app/service/product/product.service';
 import { CategoryService } from 'src/app/service/category/category.service';
-import { Product } from 'src/app/model/product/product';
+import { ProductRequest } from 'src/app/model/product/product';
 import { Category } from 'src/app/model/category/category';
 
 @Component({
@@ -14,16 +14,17 @@ import { Category } from 'src/app/model/category/category';
   styleUrls: ['./product-create.component.css'],
 })
 export class ProductCreateComponent implements OnInit { 
-  product: Product = {
+  // Use ProductRequest - send categoryId instead of category object
+  product: ProductRequest = {
     productName: '',
     description: '',
     price: 0,
     quantity: 0,
-    category: null,
     imageUrl: '',
+    categoryId: 0,  // Now we send categoryId directly
   };
 
-  //Ahora recibimos objetos
+  // Store categories for the dropdown
   categories: Category[] = [];
 
   successMessage = '';
@@ -58,13 +59,8 @@ export class ProductCreateComponent implements OnInit {
       return;
     }
 
-    // Prepare product data for sending - only send category id to avoid validation issues
-    const productToSend: any = {
-      ...this.product,
-      category: this.product.category ? { id: this.product.category.id } : null
-    };
-
-    this.productService.createProduct(productToSend).subscribe({
+    // Send ProductRequest directly - categoryId is already set from the form
+    this.productService.createProduct(this.product).subscribe({
       next: (response) => {
         this.successMessage = `Product "${response.productName}" created successfully!`;
         form.resetForm();
@@ -75,8 +71,8 @@ export class ProductCreateComponent implements OnInit {
           description: '',
           price: 0,
           quantity: 0,
-          category: null,
           imageUrl: '',
+          categoryId: 0,
         };
         // Opcional: recargar categorías 
         this.loadCategories(); 

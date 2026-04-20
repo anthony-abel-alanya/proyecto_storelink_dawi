@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import com.proyecto.shop.StoreLink.Dto.PaymentResponse;
 import com.proyecto.shop.StoreLink.Model.Payment;
 import com.proyecto.shop.StoreLink.Service.PaymentService;
 
@@ -27,9 +28,9 @@ public class PaymentController {
     // Process a new payment
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('CUSTOMER')")
     @PostMapping
-    public ResponseEntity<Payment> processPayment(@RequestBody @Valid Payment paymentRequest) {
+    public ResponseEntity<PaymentResponse> processPayment(@RequestBody @Valid Payment paymentRequest) {
         logger.info("Received payment request for Order");
-        Payment processedPayment = paymentService.processPayment(paymentRequest);
+        PaymentResponse processedPayment = paymentService.processPayment(paymentRequest);
         logger.info("Payment processed with status: {} for Order", 
                 processedPayment.getStatus());
         return ResponseEntity.ok(processedPayment);
@@ -38,9 +39,9 @@ public class PaymentController {
     // Get all payments
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
-    public ResponseEntity<List<Payment>> getAllPayments() {
+    public ResponseEntity<List<PaymentResponse>> getAllPayments() {
         logger.info("Fetching all payments...");
-        List<Payment> payments = paymentService.getAllPayments();
+        List<PaymentResponse> payments = paymentService.getAllPayments();
 
         if (payments.isEmpty()) {
             logger.info("No payments found.");
@@ -54,9 +55,9 @@ public class PaymentController {
     // Get payment by ID
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('CUSTOMER')")
     @GetMapping("/{id}")
-    public ResponseEntity<Payment> getPaymentById(@PathVariable int id) {
+    public ResponseEntity<PaymentResponse> getPaymentById(@PathVariable int id) {
         logger.info("Fetching payment with ID: {}", id);
-        Payment payment = paymentService.getPaymentById(id);
+        PaymentResponse payment = paymentService.getPaymentById(id);
         logger.info("Payment found with ID: {}", id);
         return ResponseEntity.ok(payment);
     }

@@ -16,14 +16,14 @@
             <select
               class="form-select"
               required
-              [(ngModel)]="newPromotion.category"
+              [(ngModel)]="selectedCategoryId"
               name="category"
               #category="ngModel"
             >
               <option [ngValue]="null" disabled selected>
                 Seleccionar categoría
               </option>
-              <option *ngFor="let category of categories" [ngValue]="category">
+              <option *ngFor="let category of categories" [ngValue]="category.id">
                 {{ category.name }}
               </option>
             </select>
@@ -96,16 +96,16 @@
         </thead>
         <tbody>
           <tr *ngFor="let promo of promotions">
-            <td>{{ promo.category?.name }}</td>
+            <td>{{ promo.categoryName }}</td>
             <td>{{ promo.discountPercentage }}</td>
-            <td>{{ promo.startDate | date : "shortDate" }}</td>
-            <td>{{ promo.endDate | date : "shortDate" }}</td>
+            <td>{{ promo.startDate | date:'dd/MM/yyyy' }}</td>
+            <td>{{ promo.endDate | date:'dd/MM/yyyy' }}</td>
             <td>
               <span
                 class="badge"
-                [ngClass]="promo.active ? 'bg-success' : 'bg-danger'"
+                [ngClass]="getStatusClass(promo)"
               >
-                {{ promo.active ? "Activa" : "Detenida" }}
+                {{ getStatusText(promo) }}
               </span>
             </td>
             <td>

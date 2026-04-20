@@ -12,7 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import com.proyecto.shop.StoreLink.Model.Product;
+import com.proyecto.shop.StoreLink.Dto.ProductRequest;
+import com.proyecto.shop.StoreLink.Dto.ProductResponse;
 import com.proyecto.shop.StoreLink.Service.ProductService;
 import com.proyecto.shop.StoreLink.Exception.ResourceNotFoundException;
 
@@ -31,9 +32,9 @@ public class ProductController {
     // Create a new product
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
-    public ResponseEntity<Product> createProduct(@Valid @RequestBody Product product) {
-        logger.info("Creating new product: {}", product.getProductName());
-        Product createdProduct = productService.createProduct(product);
+    public ResponseEntity<ProductResponse> createProduct(@Valid @RequestBody ProductRequest request) {
+        logger.info("Creating new product: {}", request.getProductName());
+        ProductResponse createdProduct = productService.createProduct(request);
         logger.info("Product created successfully with ID: {}", createdProduct.getProductId());
         return ResponseEntity.ok(createdProduct);
     }
@@ -43,7 +44,7 @@ public class ProductController {
     @GetMapping
     public ResponseEntity<?> getAllProducts() {
         logger.info("Fetching all products...");
-        List<Product> products = productService.getAllProducts();
+        List<ProductResponse> products = productService.getAllProducts();
 
         if (products.isEmpty()) {
             logger.info("No products found.");
@@ -57,7 +58,7 @@ public class ProductController {
     // Get product by ID
     // Anyone logged in or not should be able to search product
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable int id) {
+    public ResponseEntity<ProductResponse> getProductById(@PathVariable int id) {
         logger.info("Fetching product with ID: {}", id);
         return productService.getProductById(id)
                 .map(product -> {
@@ -73,8 +74,8 @@ public class ProductController {
     // Search products by name (ignores case, substring accepted)
     // Anyone should be able to search
     @GetMapping("/search")
-    public ResponseEntity<List<Product>> searchProducts(@RequestParam String name) {
-        List<Product> products = productService.searchProductsByName(name);
+    public ResponseEntity<List<ProductResponse>> searchProducts(@RequestParam String name) {
+        List<ProductResponse> products = productService.searchProductsByName(name);
         if (products.isEmpty()) {
         	logger.info("No products found with name containing: {}", name);
             return ResponseEntity.noContent().build();
@@ -86,10 +87,10 @@ public class ProductController {
     // Update an existing product
     @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable int id,
-                                                       @Valid @RequestBody Product updatedProduct) {
+    public ResponseEntity<ProductResponse> updateProduct(@PathVariable int id,
+                                                       @Valid @RequestBody ProductRequest request) {
         logger.info("Updating product with ID: {}", id);
-        Product updated = productService.updateProduct(id, updatedProduct);
+        ProductResponse updated = productService.updateProduct(id, request);
         logger.info("Product updated successfully with ID: {}", updated.getProductId());
         return ResponseEntity.ok(updated);
     }

@@ -19,15 +19,16 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   login(credentials: LoginRequest): Observable<any> {
+    // Now response is AuthResponse: { token, email, roles }
     return this.http.post<any>(this.loginUrl, credentials).pipe(
       tap((response) => {
-        const roles = response.user.allRoles.map((role: any) => role.roleName);
-        localStorage.setItem('jwtToken', response.token); // Save JWT
-        localStorage.setItem('userRole', roles); // Save user role (for now one user can't have multiple roles)
-
-        if (localStorage.getItem('userRole') === 'CUSTOMER') {
-          localStorage.setItem('userEmail', response.user.email); // Store customer email
-        }
+        // Store only token, email, and role - no password or user object
+        localStorage.setItem('jwtToken', response.token);
+        localStorage.setItem('userEmail', response.email);
+        
+        // Get the first role (assuming single role for now)
+        const role = response.roles && response.roles.length > 0 ? response.roles[0] : null;
+        localStorage.setItem('userRole', role);
       })
     );
   }

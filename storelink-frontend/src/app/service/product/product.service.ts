@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Product } from 'src/app/model/product/product';
+import { Product, ProductRequest } from 'src/app/model/product/product';
 import { Category } from 'src/app/model/category/category';
 import { environment } from 'src/environment/environment';
 
@@ -31,13 +31,13 @@ export class ProductService {
   }
 
   //------------------------ADMIN ACTIONS------------------------------------
-  // Create new product (admin only)
-  createProduct(product: Product): Observable<Product> {
+  // Create new product (admin only) - uses ProductRequest with categoryId
+  createProduct(product: ProductRequest): Observable<Product> {
     return this.http.post<Product>(this.baseUrl, product);
   }
 
-  // Update existing product (admin only)
-  updateProduct(id: number, product: Product): Observable<Product> {
+  // Update existing product (admin only) - uses ProductRequest with categoryId
+  updateProduct(id: number, product: ProductRequest): Observable<Product> {
     return this.http.put<Product>(`${this.baseUrl}/${id}`, product);
   }
 

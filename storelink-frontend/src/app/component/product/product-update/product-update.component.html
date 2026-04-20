@@ -49,14 +49,13 @@
   <label class="form-label">Categoría</label>
   <select
     class="form-select"
-    name="category"
-    [(ngModel)]="selectedProduct.category"
+    name="categoryId"
+    [(ngModel)]="selectedProduct.categoryId"
     required
-    [compareWith]="compareCategories"
-    [ngClass]="{ 'is-invalid': submitted && !selectedProduct.category }"
+    [ngClass]="{ 'is-invalid': submitted && !selectedProduct.categoryId }"
   >
-    <option [ngValue]="null" disabled>Seleccionar una categoría</option>
-    <option *ngFor="let c of categories" [ngValue]="c">
+    <option [ngValue]="0" disabled>Seleccionar una categoría</option>
+    <option *ngFor="let c of categories" [ngValue]="c.id">
       {{ c.name }}
     </option>
   </select>
@@ -187,7 +186,7 @@
       <tr *ngFor="let p of allProducts">
         <td>{{ p.productId }}</td>
         <td>{{ p.productName }}</td>
-        <td>{{ p.category?.name }}</td>
+        <td>{{ p.categoryName }}</td>
         <td>S/ {{ p.price | number:'1.2-2' }}</td>
         <td>{{ p.quantity }}</td>
         <td>

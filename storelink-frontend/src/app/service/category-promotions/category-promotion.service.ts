@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { CategoryPromotion } from 'src/app/model/category-promotions/category-promotion';
+import { CategoryPromotion, CategoryPromotionRequest } from 'src/app/model/category-promotions/category-promotion';
 import { environment } from 'src/environment/environment';
 
 
@@ -31,7 +31,7 @@ export class CategoryPromotionService {
   }
 
   // Create new promotion
-  createPromotion(promotion: CategoryPromotion): Observable<CategoryPromotion> {
+  createPromotion(promotion: CategoryPromotionRequest): Observable<CategoryPromotion> {
     return this.http.post<CategoryPromotion>(this.baseUrl, promotion);
   }
 

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Category } from 'src/app/model/category/category';
-import { CategoryPromotion } from 'src/app/model/category-promotions/category-promotion';
+import { CategoryPromotion, CategoryPromotionRequest } from 'src/app/model/category-promotions/category-promotion';
+import { PromotionStatus } from 'src/app/model/category-promotions/promotion-status';
 import { CategoryPromotionService } from 'src/app/service/category-promotions/category-promotion.service';
 import { CategoryService } from 'src/app/service/category/category.service';
 import { FormsModule, NgForm } from '@angular/forms';
@@ -16,15 +17,14 @@ import { FormsModule, NgForm } from '@angular/forms';
 export class PromotionsComponent implements OnInit {
   promotions: CategoryPromotion[] = [];
   categories: Category[] = [];
-  newPromotion: CategoryPromotion = {
-    id: 0,
-    category: null,
+  // Use categoryId for creation
+  selectedCategoryId: number | null = null;
+  newPromotion = {
     startDate: '',
     endDate: '',
     discountPercentage: 0,
     active: true,
   };
-  today = new Date();
 
   constructor(
     private promotionService: CategoryPromotionService,
@@ -50,28 +50,61 @@ export class PromotionsComponent implements OnInit {
     });
   }
 
+  // Get CSS class based on backend status (enum)
+  getStatusClass(promo: CategoryPromotion): string {
+    switch (promo.status) {
+      case PromotionStatus.ACTIVE:
+        return 'bg-success';
+      case PromotionStatus.PENDING:
+        return 'bg-warning text-dark';
+      case PromotionStatus.EXPIRED:
+        return 'bg-secondary';
+      case PromotionStatus.STOPPED:
+        return 'bg-danger';
+      default:
+        return 'bg-secondary';
+    }
+  }
+
+  // Get display text based on backend status (enum)
+  getStatusText(promo: CategoryPromotion): string {
+    switch (promo.status) {
+      case PromotionStatus.ACTIVE:
+        return 'Activa';
+      case PromotionStatus.PENDING:
+        return 'Pendiente';
+      case PromotionStatus.EXPIRED:
+        return 'Expirada';
+      case PromotionStatus.STOPPED:
+        return 'Detenida';
+      default:
+        return 'Desconocido';
+    }
+  }
+
   createPromotion(form: NgForm) {
-    if (form.invalid) {
+    if (form.invalid || !this.selectedCategoryId) {
       alert('Please fill all required fields correctly!');
       return;
     }
 
-    // Convert Date objects/ string inputs to ISO strings for backend
-    const promotionToSend = {
-      ...this.newPromotion,
+    // Build request object with categoryId
+    const promotionToSend: CategoryPromotionRequest = {
+      categoryId: this.selectedCategoryId!,
+      discountPercentage: this.newPromotion.discountPercentage,
       startDate: new Date(this.newPromotion.startDate).toISOString(),
       endDate: new Date(this.newPromotion.endDate).toISOString(),
+      active: true,
     };
 
     this.promotionService.createPromotion(promotionToSend).subscribe({
       next: (res) => {
         alert(
-          `Promotion for category "${res.category?.name ?? 'unknown'}" created successfully!`
+          `Promotion for category "${res.categoryName ?? 'unknown'}" created successfully!`
         );
         // Reset form and model
+        this.selectedCategoryId = null;
         this.newPromotion = {
-          id: 0,
-          category: null,
           startDate: '',
           endDate: '',
           discountPercentage: 0,
@@ -90,11 +123,11 @@ export class PromotionsComponent implements OnInit {
   }
 
   stopPromotion(promo: CategoryPromotion) {
-    if (!confirm(`Stop promotion for category "${promo.category?.name ?? 'unknown'}"?`)) return;
+    if (!confirm(`Stop promotion for category "${promo.categoryName ?? 'unknown'}"?`)) return;
 
     this.promotionService.stopPromotion(promo.id!).subscribe({
       next: () => {
-        alert(`Promotion for category "${promo.category?.name ?? 'unknown'}" stopped.`);
+        alert(`Promotion for category "${promo.categoryName ?? 'unknown'}" stopped.`);
         this.loadPromotions();
       },
       error: (err) => console.error('Failed to stop promotion', err),
@@ -104,7 +137,7 @@ export class PromotionsComponent implements OnInit {
   deletePromotion(promo: CategoryPromotion) {
     if (
       !confirm(
-        `Delete promotion for category "${promo.category?.name ?? 'unknown'}" permanently?`
+        `Delete promotion for category "${promo.categoryName ?? 'unknown'}" permanently?`
       )
     ) {
       return;

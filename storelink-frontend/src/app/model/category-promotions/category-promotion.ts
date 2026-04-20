@@ -1,10 +1,22 @@
-import { Category } from 'src/app/model/category/category';
+import { PromotionStatus } from './promotion-status';
 
+// Response from backend - CategoryPromotionResponse
 export interface CategoryPromotion {
   id?: number;
-  category: Category | null;
+  categoryId: number | null;
+  categoryName: string | null;
   discountPercentage: number;
-  startDate: string; // e.g., "2025-10-28"
+  startDate: string;
+  endDate: string;
+  active: boolean;
+  status: PromotionStatus;
+}
+
+// Request to backend for creating/updating
+export interface CategoryPromotionRequest {
+  categoryId: number;
+  discountPercentage: number;
+  startDate: string;
   endDate: string;
   active: boolean;
 }

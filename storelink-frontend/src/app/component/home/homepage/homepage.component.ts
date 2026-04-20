@@ -53,11 +53,10 @@ export class HomepageComponent implements OnInit {
     });
   }
 
-  // Get discount % for a product based on its category
+  // Get discount % for a product based on its categoryId (robust comparison)
   getDiscountForProduct(product: Product): number | null {
     const promo = this.promotions.find(
-      (p) =>
-        p.category?.name?.toLowerCase() === product.category?.name?.toLowerCase()
+      (p) => p.categoryId === product.categoryId
     );
     return promo ? promo.discountPercentage : null;
   }

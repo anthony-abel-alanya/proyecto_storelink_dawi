@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Product } from 'src/app/model/product/product';
+import { Product, ProductRequest } from 'src/app/model/product/product';
 import { ProductService } from 'src/app/service/product/product.service';
 import { CategoryService } from 'src/app/service/category/category.service';
 import { FormsModule, NgForm } from '@angular/forms';
@@ -16,7 +16,8 @@ import { Category } from 'src/app/model/category/category';
 export class ProductUpdateComponent implements OnInit {
   allProducts: Product[] = [];
   productIdToEdit: number | null = null;
-  selectedProduct: Product | null = null;
+  // Use ProductRequest - contains categoryId (number) instead of category object
+  selectedProduct: ProductRequest | null = null;
   submitted = false;
   successMessage = '';
   errorMessage = '';
@@ -42,10 +43,6 @@ export class ProductUpdateComponent implements OnInit {
     });
   }
 
-  compareCategories(c1: Category, c2: Category): boolean {
-    return c1 && c2 ? c1.id === c2.id : c1 === c2;
-  }
-
   loadAllProducts(): void {
     this.productService.getAllProducts().subscribe({
       next: (products) => (this.allProducts = products),
@@ -62,9 +59,21 @@ export class ProductUpdateComponent implements OnInit {
     if (this.productIdToEdit != null) {
       this.productService.getProductById(this.productIdToEdit).subscribe({
         next: (product) => {
-          this.selectedProduct = { ...product };
-          // Nota: Al ser dinámico, si 'product.category' existe en 
-          // 'this.categories', el combo se seleccionará solo.
+          // Convert ProductResponse (categoryName) to ProductRequest (categoryId)
+          this.selectedProduct = {
+            productName: product.productName,
+            description: product.description || '',
+            price: product.price,
+            quantity: product.quantity,
+            imageUrl: product.imageUrl,
+            categoryId: 0 // Will be set below
+          };
+          
+          // Find category id by name from the categories list
+          const category = this.categories.find(c => c.name === product.categoryName);
+          if (category && category.id) {
+            this.selectedProduct.categoryId = category.id;
+          }
         },
         error: (err) => {
           console.error(err);
@@ -81,14 +90,9 @@ export class ProductUpdateComponent implements OnInit {
 
     if (form.invalid || !this.selectedProduct || !this.productIdToEdit) return;
 
-    // Prepare product data for sending - only send category id
-    const productToSend: any = {
-      ...this.selectedProduct,
-      category: this.selectedProduct.category ? { id: this.selectedProduct.category.id } : null
-    };
-
+    // Send ProductRequest directly - categoryId is already set
     this.productService
-      .updateProduct(this.productIdToEdit, productToSend)
+      .updateProduct(this.productIdToEdit, this.selectedProduct)
       .subscribe({
         next: (updatedProduct) => {
           this.successMessage = `Product "${updatedProduct.productName}" updated successfully!`;
