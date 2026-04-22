@@ -1,0 +1,19 @@
+.footer {
+  width: 100%;
+  margin-top: auto;
+}
+
+.footer a:hover {
+  color: #fff !important;
+  opacity: 1 !important;
+  transition: opacity 0.3s ease;
+}
+
+.footer h5,
+.footer h6 {
+  color: #fff;
+}
+
+.footer .text-primary {
+  color: #0d6efd !important;
+}

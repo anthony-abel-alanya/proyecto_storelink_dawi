@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { TopNavBarComponent } from './component/nav/top-nav-bar/top-nav-bar.component';
+import { FooterComponent } from './component/footer/footer.component';
 import { isTokenExpired } from './util/jwt-util';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, TopNavBarComponent],
+  imports: [RouterOutlet, TopNavBarComponent, FooterComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
