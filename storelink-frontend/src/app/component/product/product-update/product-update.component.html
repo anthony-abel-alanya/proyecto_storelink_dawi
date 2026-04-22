@@ -1,198 +1,316 @@
-<div class="container my-5">
-  <h2 class="text-center mb-4">Actualizar Producto</h2>
+<div class="container py-5">
 
-  <!-- Enter Product ID to Edit -->
-  <div class="mb-4 row g-2 align-items-center">
-    <div class="col-auto">
-      <input
-        type="number"
-        class="form-control"
-        placeholder="Ingresa el ID del Producto"
-        [(ngModel)]="productIdToEdit"
-        name="productIdToEdit"
-      />
-    </div>
-    <div class="col-auto">
-      <button class="btn btn-primary" (click)="fetchProduct()">
-        Obtener Producto
-      </button>
-    </div>
+  <!-- ============================================ -->
+  <!-- HEADER -->
+  <!-- ============================================ -->
+  <div class="text-center mb-4">
+    <h2 class="fw-bold mb-1">Gestión de Productos</h2>
+    <p class="text-muted mb-0">Administra productos, filtros y edición en un solo lugar</p>
   </div>
 
-  <!-- Edit Form -->
-  <div *ngIf="selectedProduct" class="p-4 border rounded shadow-sm bg-light">
-    <form #updateForm="ngForm" (ngSubmit)="onSubmit(updateForm)" novalidate>
-      <!-- Product Name -->
-      <div class="mb-3">
-        <label class="form-label">Nombre del Producto</label>
-        <input
-          type="text"
-          class="form-control"
-          name="productName"
-          [(ngModel)]="selectedProduct.productName"
-          required
-          minlength="3"
-          [ngClass]="{
-            'is-invalid': submitted && !selectedProduct.productName
-          }"
-        />
-        <div
-          class="invalid-feedback"
-          *ngIf="submitted && !selectedProduct.productName"
-        >
-          El nombre del producto es obligatorio.
-        </div>
-      </div>
+  <!-- ============================================ -->
+  <!-- ALERTAS -->
+  <!-- ============================================ -->
+  <div class="row justify-content-center mb-3">
+    <div class="col-lg-10">
 
-      <!-- Category -->
-      <div class="mb-3">
-  <label class="form-label">Categoría</label>
-  <select
-    class="form-select"
-    name="categoryId"
-    [(ngModel)]="selectedProduct.categoryId"
-    required
-    [ngClass]="{ 'is-invalid': submitted && !selectedProduct.categoryId }"
-  >
-    <option [ngValue]="0" disabled>Seleccionar una categoría</option>
-    <option *ngFor="let c of categories" [ngValue]="c.id">
-      {{ c.name }}
-    </option>
-  </select>
-</div>
-
-      <!-- Description -->
-      <div class="mb-3">
-        <label class="form-label">Descripción</label>
-        <textarea
-          class="form-control"
-          name="description"
-          [(ngModel)]="selectedProduct.description"
-        ></textarea>
-      </div>
-
-      <!-- Price -->
-      <div class="mb-3">
-        <label class="form-label">Precio</label>
-        <input
-          type="number"
-          class="form-control"
-          name="price"
-          [(ngModel)]="selectedProduct.price"
-          required
-          min="0.01"
-          [ngClass]="{
-            'is-invalid':
-              submitted &&
-              (!selectedProduct.price || selectedProduct.price <= 0)
-          }"
-        />
-        <div
-          class="invalid-feedback"
-          *ngIf="
-            submitted && (!selectedProduct.price || selectedProduct.price <= 0)
-          "
-        >
-          El precio debe ser mayor a 0.
-        </div>
-      </div>
-
-      <!-- Quantity -->
-      <div class="mb-3">
-        <label class="form-label">Cantidad</label>
-        <input
-          type="number"
-          class="form-control"
-          name="quantity"
-          [(ngModel)]="selectedProduct.quantity"
-          required
-          min="0"
-          [ngClass]="{
-            'is-invalid':
-              submitted &&
-              (!selectedProduct.quantity || selectedProduct.quantity < 0)
-          }"
-        />
-        <div
-          class="invalid-feedback"
-          *ngIf="
-            submitted &&
-            (!selectedProduct.quantity || selectedProduct.quantity < 0)
-          "
-        >
-          La cantidad debe ser al menos 0.
-        </div>
-      </div>
-
-      <!-- Image URL -->
-      <div class="mb-3">
-        <label class="form-label">URL de la Imagen</label>
-        <input
-          type="text"
-          class="form-control"
-          name="imageUrl"
-          [(ngModel)]="selectedProduct.imageUrl"
-          required
-          pattern="https?://.+"
-          [ngClass]="{ 'is-invalid': submitted && !selectedProduct.imageUrl }"
-        />
-        <div
-          class="invalid-feedback"
-          *ngIf="submitted && !selectedProduct.imageUrl"
-        >
-          Se requiere una URL de imagen válida.
-        </div>
-      </div>
-
-      <!-- Image Preview -->
-      <div *ngIf="selectedProduct.imageUrl" class="text-center mb-3">
-        <img
-          [src]="selectedProduct.imageUrl"
-          alt="Vista Previa"
-          class="img-fluid rounded"
-          style="max-width: 150px"
-        />
-      </div>
-
-      <!-- Submit -->
-      <button type="submit" class="btn btn-success w-100">
-        Actualizar Producto
-      </button>
-
-      <!-- Alerts -->
-      <div *ngIf="successMessage" class="alert alert-success mt-3">
+      <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show shadow-sm">
         {{ successMessage }}
+        <button type="button" class="btn-close" (click)="successMessage = ''"></button>
       </div>
-      <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+
+      <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show shadow-sm">
         {{ errorMessage }}
+        <button type="button" class="btn-close" (click)="errorMessage = ''"></button>
       </div>
-    </form>
+
+    </div>
   </div>
 
-  <!-- Product Table -->
-  <h5>Todos los Productos</h5>
-  <table class="table table-striped table-bordered mb-4">
-    <thead class="table-dark">
-      <tr>
-        <th>ID</th>
-        <th>Nombre</th>
-        <th>Categoría</th>
-        <th>Precio</th>
-        <th>Cantidad</th>
-        <th>Imagen</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let p of allProducts">
-        <td>{{ p.productId }}</td>
-        <td>{{ p.productName }}</td>
-        <td>{{ p.categoryName }}</td>
-        <td>S/ {{ p.price | number:'1.2-2' }}</td>
-        <td>{{ p.quantity }}</td>
-        <td>
-          <img [src]="p.imageUrl" alt="img" style="width: 50px; height: 50px" />
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+
+      <!-- ============================================ -->
+      <!-- FILTROS -->
+      <!-- ============================================ -->
+      <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">🔎 Filtros de búsqueda</h5>
+        </div>
+
+        <div class="card-body">
+          <div class="row g-3">
+
+            <div class="col-md-3">
+              <label class="form-label">Nombre</label>
+              <input type="text" class="form-control" placeholder="Buscar..." [(ngModel)]="filterName"
+                (ngModelChange)="applyFilters()">
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label">Categoría</label>
+              <select class="form-select" [(ngModel)]="filterCategory" (ngModelChange)="applyFilters()">
+                <option value="">Todas</option>
+                <option *ngFor="let c of categories" [value]="c.name">{{ c.name }}</option>
+              </select>
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label">Precio</label>
+              <div class="input-group">
+                <input type="number" class="form-control" placeholder="Min" [(ngModel)]="filterPriceMin"
+                  (ngModelChange)="applyFilters()">
+                <input type="number" class="form-control" placeholder="Max" [(ngModel)]="filterPriceMax"
+                  (ngModelChange)="applyFilters()">
+              </div>
+            </div>
+
+            <!-- Rango de stock -->
+            <div class="col-md-3">
+              <label class="form-label">Stock</label>
+              <div class="input-group">
+                <input type="number" class="form-control" placeholder="Min" [(ngModel)]="filterStockMin"
+                  (ngModelChange)="applyFilters()" />
+                <input type="number" class="form-control" placeholder="Max" [(ngModel)]="filterStockMax"
+                  (ngModelChange)="applyFilters()" />
+              </div>
+            </div>
+
+            <div class="col-md-3 d-flex align-items-end">
+              <button class="btn btn-outline-secondary w-100" (click)="clearFilters()">
+                ♻ Limpiar filtros
+              </button>
+            </div>
+
+            <div class="col-12">
+              <div class="text-muted small">
+                <strong>{{ totalItems }}</strong> productos encontrados
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================ -->
+      <!-- TABLA -->
+      <!-- ============================================ -->
+      <div class="card border-0 shadow-sm">
+
+        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">📦 Productos</h5>
+
+          <div class="d-flex align-items-center gap-2">
+            <small class="text-white">Mostrar</small>
+            <select class="form-select form-select-sm" style="width:auto" [(ngModel)]="pageSize"
+              (ngModelChange)="onPageSizeChange()">
+              <option *ngFor="let size of pageSizeOptions" [value]="size">{{ size }}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="card-body p-0">
+
+          <div class="table-responsive">
+
+            <table class="table table-hover align-middle mb-0">
+
+              <thead class="table-light">
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>Categoría</th>
+                  <th>Autor</th>
+                  <th>Precio</th>
+                  <th>Stock</th>
+                  <th class="text-end">Acciones</th>
+                </tr>
+              </thead>
+
+              <tbody>
+
+                <tr *ngFor="let p of paginatedProducts">
+
+                  <td class="fw-semibold">{{ p.productId }}</td>
+                  <td>{{ p.productName }}</td>
+                  <td>
+                    <span class="badge bg-secondary">{{ p.categoryName }}</span>
+                  </td>
+                  <td>{{ p.author || '-' }}</td>
+
+                  <td>S/ {{ p.price | number:'1.2-2' }}</td>
+
+                  <td>
+                    <span class="badge" [class.bg-success]="p.quantity > 0" [class.bg-danger]="p.quantity <= 0">
+                      {{ p.quantity }}
+                    </span>
+                  </td>
+
+                  <td class="text-end">
+                    <button class="btn btn-sm btn-outline-primary" (click)="editProduct(p)">
+                      ✏ Editar
+                    </button>
+                  </td>
+
+                </tr>
+
+                <tr *ngIf="paginatedProducts.length === 0">
+                  <td colspan="7" class="text-center py-5 text-muted">
+                    📦 No hay productos disponibles
+                  </td>
+                </tr>
+
+              </tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+
+        <!-- PAGINACIÓN -->
+        <div class="card-footer bg-white" *ngIf="totalPages > 1">
+
+          <nav>
+            <ul class="pagination justify-content-center mb-0">
+
+              <li class="page-item" [class.disabled]="currentPage === 1">
+                <a class="page-link" (click)="goToPage(1)">«</a>
+              </li>
+
+              <li class="page-item" *ngFor="let page of getPageNumbers()" [class.active]="page === currentPage">
+                <a class="page-link" (click)="goToPage(page)">{{ page }}</a>
+              </li>
+
+              <li class="page-item" [class.disabled]="currentPage === totalPages">
+                <a class="page-link" (click)="goToPage(totalPages)">»</a>
+              </li>
+
+            </ul>
+          </nav>
+
+          <div class="text-center text-muted small mt-2">
+            Página {{ currentPage }} de {{ totalPages }}
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- ============================================ -->
+      <!-- FORMULARIO EDICIÓN -->
+      <!-- ============================================ -->
+      <div *ngIf="selectedProduct" class="card border-primary shadow-sm mt-4">
+
+        <div class="card-header bg-primary text-white">
+          ✏ Editando producto: <strong>{{ selectedProduct.productName }}</strong>
+        </div>
+
+        <div class="card-body">
+
+          <form #updateForm="ngForm" (ngSubmit)="onSubmit(updateForm)">
+
+            <div class="row g-4">
+
+              <!-- ================================= -->
+              <!-- FORM CAMPOS -->
+              <!-- ================================= -->
+              <div class="col-lg-8">
+
+                <div class="row g-3">
+
+                  <div class="col-md-6">
+                    <label class="form-label">Nombre</label>
+                    <input class="form-control" [(ngModel)]="selectedProduct.productName" name="productName">
+                  </div>
+
+                  <div class="col-md-6">
+                    <label class="form-label">Categoría</label>
+                    <select class="form-select" [(ngModel)]="selectedProduct.categoryId" name="categoryId">
+                      <option *ngFor="let c of categories" [ngValue]="c.id">
+                        {{ c.name }}
+                      </option>
+                    </select>
+                  </div>
+
+                  <div class="col-md-6">
+                    <label class="form-label">Precio</label>
+                    <input type="number" class="form-control" [(ngModel)]="selectedProduct.price" name="price">
+                  </div>
+
+                  <div class="col-md-6">
+                    <label class="form-label">Stock</label>
+                    <input type="number" class="form-control" [(ngModel)]="selectedProduct.quantity" name="quantity">
+                  </div>
+
+                  <!-- DESCRIPCIÓN (NUEVO) -->
+                  <div class="col-12">
+                    <label class="form-label">Descripción</label>
+                    <textarea class="form-control" rows="3" [(ngModel)]="selectedProduct.description"
+                      name="description">
+              </textarea>
+                  </div>
+
+                  <!-- AUTOR -->
+                  <div class="col-12">
+                    <label class="form-label">Autor</label>
+                    <input class="form-control" [(ngModel)]="selectedProduct.author" name="author"
+                      placeholder="Nombre del autor del libro">
+                  </div>
+
+                  <!-- URL IMAGEN -->
+                  <div class="col-12">
+                    <label class="form-label">Imagen (URL)</label>
+                    <input class="form-control" [(ngModel)]="selectedProduct.imageUrl" name="imageUrl">
+                  </div>
+
+                </div>
+
+              </div>
+
+              <!-- ================================= -->
+              <!-- PREVIEW IMAGEN -->
+              <!-- ================================= -->
+              <div class="col-lg-4 text-center">
+
+                <label class="form-label d-block">Vista previa</label>
+
+                <div class="border rounded p-2 bg-light">
+
+                  <img [src]="selectedProduct.imageUrl || 'https://via.placeholder.com/300x200?text=Sin+imagen'"
+                    class="img-fluid rounded shadow-sm" style="max-height: 220px; object-fit: cover;" alt="preview"
+                    onerror="this.src='https://via.placeholder.com/300x200?text=Sin+imagen'" />
+
+                </div>
+
+                <small class="text-muted d-block mt-2">
+                  La imagen se actualiza en tiempo real
+                </small>
+
+              </div>
+
+            </div>
+
+            <!-- ================================= -->
+            <!-- BOTONES -->
+            <!-- ================================= -->
+            <div class="d-flex gap-2 mt-4">
+
+              <button class="btn btn-success w-100">
+                💾 Guardar
+              </button>
+
+              <button type="button" class="btn btn-secondary" (click)="cancelEdit()">
+                Cancelar
+              </button>
+
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
 </div>

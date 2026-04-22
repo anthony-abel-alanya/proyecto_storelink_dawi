@@ -18,10 +18,11 @@ export class ProductCreateComponent implements OnInit {
   product: ProductRequest = {
     productName: '',
     description: '',
+    author: '',
     price: 0,
     quantity: 0,
     imageUrl: '',
-    categoryId: 0,  // Now we send categoryId directly
+    categoryId: 0,
   };
 
   // Store categories for the dropdown
@@ -69,6 +70,7 @@ export class ProductCreateComponent implements OnInit {
         this.product = {
           productName: '',
           description: '',
+          author: '',
           price: 0,
           quantity: 0,
           imageUrl: '',

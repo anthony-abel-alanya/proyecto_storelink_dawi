@@ -3,19 +3,20 @@ export interface Product {
   productId?: number;
   productName: string;
   description?: string;
+  author?: string;
   price: number;
   quantity: number;
   imageUrl: string;
-  categoryId?: number;    // For logic comparisons
-  categoryName?: string;  // For display only
+  categoryId?: number;
+  categoryName?: string;
 }
 
-// Interface for ProductRequest to send to backend
 export interface ProductRequest {
   productName: string;
   description?: string;
+  author?: string;
   price: number;
   quantity: number;
   imageUrl: string;
-  categoryId: number;  // Send categoryId instead of category object
+  categoryId: number;
 }

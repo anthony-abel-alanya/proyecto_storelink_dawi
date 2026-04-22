@@ -1,0 +1,16 @@
+/* Product Detail Component Styles */
+.card-img-top {
+  border-radius: 8px;
+}
+
+.badge {
+  vertical-align: middle;
+}
+
+.btn-lg {
+  padding: 12px 24px;
+}
+
+.bg-light {
+  background-color: #f8f9fa !important;
+}

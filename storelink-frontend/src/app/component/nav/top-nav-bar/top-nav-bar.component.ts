@@ -11,6 +11,7 @@ import { AuthService } from 'src/app/service/auth/auth.service';
 })
 export class TopNavBarComponent {
   cart: { [key: number]: number } = {};
+  
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
@@ -42,5 +43,25 @@ export class TopNavBarComponent {
 
   cartItemCount(): number {
     return Object.values(this.cart).reduce((total, qty) => total + qty, 0);
+  }
+
+  // Obtener email del usuario desde el token
+  getUserEmail(): string {
+    return this.authService.getEmail() || '';
+  }
+
+  // Obtener el nombre del usuario (sin @domain.com)
+  getUserName(): string {
+    const email = this.getUserEmail();
+    return email ? email.split('@')[0] : 'Usuario';
+  }
+
+  // Obtener el rol del usuario
+  getUserRole(): string {
+    const role = this.authService.getRole();
+    if (role && role.includes('ADMIN')) {
+      return 'Administrador';
+    }
+    return 'Cliente';
   }
 }

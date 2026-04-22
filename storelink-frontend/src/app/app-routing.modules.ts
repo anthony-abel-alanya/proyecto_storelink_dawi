@@ -9,9 +9,11 @@ import { AdminHomeComponent } from './component/admin/admin-home/admin-home.comp
 import { ProductCreateComponent } from './component/product/product-create/product-create.component';
 import { ProductUpdateComponent } from './component/product/product-update/product-update.component';
 import { ManageProductsComponent } from './component/product/manage-products/manage-products.component';
+import { ProductDetailComponent } from './component/product/product-detail/product-detail.component';
 import { OrderStatusUpdateComponent } from './component/order/order-status-update/order-status-update.component';
 import { PromotionsComponent } from './component/admin/promotions/promotions.component';
 import { CategoryManagementComponent } from './component/admin/category-management/category-management.component';
+import { UserManagementComponent } from './component/admin/user-management/user-management.component';
 import { PaymentCreateComponent } from './component/payment/payment-create/payment-create.component';
 import { OrderPlacedComponent } from './component/order/order-placed/order-placed.component';
 import { CustomerProfileComponent } from './component/customer/customer-profile/customer-profile.component';
@@ -21,6 +23,7 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
   { path: 'home', component: HomepageComponent },
+  { path: 'product/:id', component: ProductDetailComponent },
   {
     path: 'cart',
     component: CartComponent,
@@ -90,6 +93,12 @@ export const routes: Routes = [
   {
     path: 'categories',
     component: CategoryManagementComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['ADMIN'] },
+  },
+  {
+    path: 'user-management',
+    component: UserManagementComponent,
     canActivate: [AuthGuard],
     data: { roles: ['ADMIN'] },
   },

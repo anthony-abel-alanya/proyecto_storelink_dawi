@@ -15,14 +15,16 @@ public class UserInfoUserDetails implements UserDetails {
     private String email;
     private String password;
     private List<SimpleGrantedAuthority> allRoles;
+    private boolean enabled;
 
-    public UserInfoUserDetails(String email, String password, List<RoleDetails> allRoles) {
+    public UserInfoUserDetails(String email, String password, List<RoleDetails> allRoles, boolean enabled) {
         super();
     	this.email = email;
         this.password = password;
         this.allRoles = allRoles.stream()
                 .map(role -> new SimpleGrantedAuthority(role.getRoleName()))
                 .collect(Collectors.toList());
+        this.enabled = enabled;
     }
 
     @Override
@@ -38,6 +40,27 @@ public class UserInfoUserDetails implements UserDetails {
     @Override
     public String getUsername() {
         return email; // Person's email will be used as their username
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    // Spring Security también necesita isAccountNonLocked() y isAccountNonExpired()
+    @Override
+    public boolean isAccountNonLocked() {
+        return enabled;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return enabled;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return enabled;
     }
 
 }

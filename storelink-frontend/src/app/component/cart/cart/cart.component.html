@@ -1,63 +1,131 @@
-<div class="container my-4">
-  <h2>Tu Carrito</h2>
-  <div *ngIf="cartProducts.length === 0" class="text-center my-5">
-    <p>¡Tu carrito está vacío!</p>
+<div class="container py-5">
+
+  <!-- Header -->
+  <div class="text-center mb-4">
+    <h2 class="fw-bold mb-1">Tu carrito</h2>
+    <p class="text-muted mb-0">Revisa los productos antes de realizar el pago</p>
   </div>
 
-  <div *ngFor="let product of cartProducts" class="row align-items-center mb-3">
-    <div class="col-md-2">
-      <img
-        [src]="product.imageUrl"
-        alt="{{ product.productName }}"
-        class="img-fluid"
-      />
-    </div>
-
-    <div class="col-md-4">
-      <h5>{{ product.productName }}</h5>
-      <p class="text-muted">{{ product.description }}</p>
-    </div>
-
-    <div class="col-md-2">
-      <strong>Precio Unitario: </strong>
-      S/ {{
-        cart[product.productId!].discountedPrice
-          | number:'1.2-2'
-      }}
-    </div>
-
-    <div class="col-md-2 d-flex align-items-center gap-2">
-      <button
-        class="btn btn-sm btn-secondary"
-        (click)="decrement(product.productId!)"
-      >
-        -
-      </button>
-      <span>{{ cart[product.productId!].quantity }}</span>
-      <button
-        class="btn btn-sm btn-secondary"
-        (click)="increment(product.productId!)"
-      >
-        +
-      </button>
-    </div>
-
-    <div class="col-md-2">
-      <button
-        class="btn btn-sm btn-danger"
-        (click)="remove(product.productId!)"
-      >
-        Eliminar
-      </button>
-    </div>
+  <!-- Empty state -->
+  <div *ngIf="cartProducts.length === 0" class="text-center py-5">
+    <div class="text-muted fs-5">🛒 Tu carrito está vacío</div>
   </div>
 
-  <div *ngIf="cartProducts.length > 0" class="mt-4 text-end">
-    <h4>
-      Total: S/ {{ totalAmount | number:'1.2-2' }}
-    </h4>
-    <button class="btn btn-success btn-lg" (click)="checkout()">
-      Pagar
-    </button>
+  <!-- Cart items -->
+  <div *ngIf="cartProducts.length > 0" class="row g-3">
+
+    <div class="col-lg-8">
+
+      <div
+        *ngFor="let product of cartProducts"
+        class="card border-0 shadow-sm mb-3"
+      >
+
+        <div class="card-body">
+
+          <div class="row align-items-center">
+
+            <!-- IMAGE -->
+            <div class="col-md-2 text-center">
+              <img
+                [src]="product.imageUrl"
+                class="img-fluid rounded"
+                style="max-height: 80px; object-fit: cover;"
+                alt="{{ product.productName }}"
+              />
+            </div>
+
+            <!-- INFO -->
+            <div class="col-md-4">
+              <h6 class="fw-bold mb-1">{{ product.productName }}</h6>
+              <small class="text-muted" *ngIf="product.author">
+                Autor: {{ product.author }}
+              </small>
+              
+            </div>
+
+            <!-- PRICE -->
+            <div class="col-md-2">
+              <div class="fw-semibold text-success">
+                S/ {{ cart[product.productId!].discountedPrice | number:'1.2-2' }}
+              </div>
+              <small class="text-muted">Precio unitario</small>
+            </div>
+
+            <!-- QUANTITY -->
+            <div class="col-md-3">
+
+              <div class="d-flex align-items-center justify-content-center gap-2">
+
+                <button
+                  class="btn btn-outline-secondary btn-sm"
+                  (click)="decrement(product.productId!)"
+                >
+                  −
+                </button>
+
+                <span class="fw-semibold">
+                  {{ cart[product.productId!].quantity }}
+                </span>
+
+                <button
+                  class="btn btn-outline-secondary btn-sm"
+                  (click)="increment(product.productId!)"
+                >
+                  +
+                </button>
+
+              </div>
+
+            </div>
+
+            <!-- REMOVE -->
+            <div class="col-md-1 text-end">
+              <button
+                class="btn btn-sm btn-outline-danger"
+                (click)="remove(product.productId!)"
+              >
+                🗑
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SUMMARY -->
+    <div class="col-lg-4">
+
+      <div class="card border-0 shadow-sm position-sticky" style="top: 20px;">
+
+        <div class="card-body">
+
+          <h5 class="fw-bold mb-3">Resumen del pedido</h5>
+
+          <div class="d-flex justify-content-between mb-2">
+            <span class="text-muted">Total</span>
+            <span class="fw-bold fs-5">
+              S/ {{ totalAmount | number:'1.2-2' }}
+            </span>
+          </div>
+
+          <hr />
+
+          <button
+            class="btn btn-success btn-lg w-100 fw-semibold"
+            (click)="checkout()"
+          >
+            Proceder al pago
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
   </div>
 </div>

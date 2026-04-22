@@ -51,6 +51,7 @@ public class CustomerService {
         user.setEmail(savedCustomer.getEmail());
         user.setPassword(savedCustomer.getPassword());
         user.setAllRoles(List.of(customerRole));
+        user.setEnabled(true); // Por defecto habilitado
         userInfoDao.save(user);
 
         return savedCustomer;
@@ -88,6 +89,27 @@ public class CustomerService {
     // Find customer by email
     public Optional<Customer> getCustomerByEmail(String email) {
         return Optional.ofNullable(customerDao.findByEmail(email));
+    }
+
+    // Get all users (excluding admin) - para el admin
+    public List<UserInfo> getAllUsersExcludingAdmin() {
+        return userInfoDao.findAllCustomers();
+    }
+    
+    // Toggle user enabled status (bloquear/desbloquear)
+    public UserInfo toggleUserStatus(int userId) {
+        UserInfo user = userInfoDao.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + userId));
+        
+        // No permitir bloquear al admin
+        boolean isAdmin = user.getAllRoles().stream()
+                .anyMatch(role -> "ADMIN".equals(role.getRoleName()));
+        if (isAdmin) {
+            throw new IllegalArgumentException("No se puede modificar el estado del administrador");
+        }
+        
+        user.setEnabled(!user.isEnabled());
+        return userInfoDao.save(user);
     }
 
 }

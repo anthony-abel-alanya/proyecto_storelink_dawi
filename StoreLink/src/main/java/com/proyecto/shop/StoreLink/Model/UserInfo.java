@@ -32,6 +32,9 @@ public class UserInfo {
     )
     private List<RoleDetails> allRoles;
     
+    @Column(name = "enabled")
+    private boolean enabled = true; // true = activo, false = bloqueado
+    
 	/*
 	 * You're telling JPA:
 	 * 

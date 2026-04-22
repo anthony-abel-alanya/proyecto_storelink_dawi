@@ -22,6 +22,7 @@
         <tr>
           <th>ID</th>
           <th>Nombre</th>
+          <th>Autor</th>
           <th>Stock</th>
           <th>Precio</th>
           <th class="text-center">Acciones</th>
@@ -31,6 +32,7 @@
         <tr *ngFor="let product of displayedProducts">
           <td>{{ product.productId }}</td>
           <td>{{ product.productName }}</td>
+          <td>{{ product.author || '-' }}</td>
           <td>{{ product.quantity }}</td>
           <td>S/ {{ product.price | number:'1.2-2' }}</td>
           <td class="text-center">
@@ -51,7 +53,7 @@
           </td>
         </tr>
         <tr *ngIf="!loading && displayedProducts.length === 0">
-          <td colspan="5" class="text-center py-4">No se encontraron productos.</td>
+          <td colspan="6" class="text-center py-4">No se encontraron productos.</td>
         </tr>
       </tbody>
     </table>

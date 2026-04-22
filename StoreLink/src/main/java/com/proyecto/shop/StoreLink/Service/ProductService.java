@@ -49,6 +49,7 @@ public class ProductService {
         return productDao.findById(id).map(product -> {
             product.setProductName(request.getProductName());
             product.setDescription(request.getDescription());
+            product.setAuthor(request.getAuthor());
             product.setPrice(request.getPrice());
             product.setQuantity(request.getQuantity());
             product.setImageUrl(request.getImageUrl());
@@ -90,6 +91,7 @@ public class ProductService {
         response.setProductId(product.getProductId());
         response.setProductName(product.getProductName());
         response.setDescription(product.getDescription());
+        response.setAuthor(product.getAuthor());
         response.setPrice(product.getPrice());
         response.setQuantity(product.getQuantity());
         response.setImageUrl(product.getImageUrl());
@@ -105,6 +107,7 @@ public class ProductService {
         Product product = new Product();
         product.setProductName(request.getProductName());
         product.setDescription(request.getDescription());
+        product.setAuthor(request.getAuthor());
         product.setPrice(request.getPrice());
         product.setQuantity(request.getQuantity());
         product.setImageUrl(request.getImageUrl());

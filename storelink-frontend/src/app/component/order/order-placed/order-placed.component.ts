@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 
 @Component({
   selector: 'app-order-placed',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './order-placed.component.html',
   styleUrls: ['./order-placed.component.css'],
 })
@@ -14,7 +14,7 @@ export class OrderPlacedComponent implements OnInit {
   totalAmount: number = 0;
   deliveryAddress: string = '';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) { }
 
   ngOnInit(): void {
     const storedDetails = sessionStorage.getItem('orderDetails');

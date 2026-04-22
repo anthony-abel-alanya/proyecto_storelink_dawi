@@ -1,89 +1,194 @@
-<div class="container my-4">
-  <div class="row">
-    <div *ngFor="let product of products" class="col-md-4 mb-4">
-      <div class="card h-100" [class.text-muted]="product.quantity === 0">
-        <img
-          [src]="product.imageUrl"
-          class="card-img-top"
-          [class.opacity-50]="product.quantity === 0"
-          alt="{{ product.productName }}"
-          height="300"
-          width="200"
-        />
-        <div class="card-body">
-          <h5 class="card-title">{{ product.productName }}</h5>
-          <p class="card-text">{{ product.description }}</p>
+<div class="container py-4">
 
-          <p class="card-text">
-            <strong>Precio: </strong>
-            <span *ngIf="getDiscountForProduct(product); else normalPrice">
-              <del>S/ {{ product.price | number:'1.2-2' }}</del>
-              <strong>
-                S/ {{ getDiscountedPrice(product) | number:'1.2-2' }}
-              </strong>
-              <span class="badge bg-success">
-                {{ getDiscountForProduct(product) }}% DESCUENTO
-              </span>
-              <br />
-              <small class="text-muted">Descuento aplicado en la facturación</small>
-            </span>
-            <ng-template #normalPrice>
-              S/ {{ product.price | number:'1.2-2' }}
-            </ng-template>
-          </p>
+  <!-- ================================= -->
+  <!-- FILTROS -->
+  <!-- ================================= -->
+  <div class="card border-0 shadow-sm mb-4">
 
-          <p class="card-text" *ngIf="product.quantity === 0">
-            <em>No Disponible</em>
-          </p>
+    <div class="card-header bg-primary text-white">
+      🔎 Buscar y filtrar productos
+    </div>
 
-          <div *ngIf="product.quantity > 0">
-            <button
-              *ngIf="!isInCart(product.productId!)"
-              class="btn btn-primary"
-              (click)="addToCart(product)"
-            >
-              Agregar al Carrito
-            </button>
+    <div class="card-body">
 
-            <div
-              *ngIf="isInCart(product.productId!)"
-              class="d-flex align-items-center gap-2"
-            >
-              <button
-                class="btn btn-sm btn-secondary"
-                (click)="decrement(product.productId!)"
-              >
-                -
-              </button>
+      <div class="row g-3">
 
-              <!-- Show quantity -->
-              <span>{{ cart[product.productId!].quantity }}</span>
+        <div class="col-md-4">
+          <label class="form-label">Buscar</label>
+          <input type="text" class="form-control"
+            placeholder="Nombre o autor..."
+            [(ngModel)]="searchTerm"
+            (ngModelChange)="applyFilters()">
+        </div>
 
-              <button
-                class="btn btn-sm btn-secondary"
-                (click)="increment(product.productId!)"
-              >
-                +
-              </button>
+        <div class="col-md-4">
+          <label class="form-label">Categoría</label>
+          <select class="form-select"
+            [(ngModel)]="filterCategory"
+            (ngModelChange)="applyFilters()">
+            <option value="">Todas</option>
+            <option *ngFor="let c of categories" [value]="c.name">
+              {{ c.name }}
+            </option>
+          </select>
+        </div>
 
-              <!-- Optionally show discounted price per unit -->
-              <span class="ms-2 text-success">
-                S/ {{
-                  cart[product.productId!].discountedPrice
-                    | number:'1.2-2'
-                }}
-              </span>
+        <div class="col-md-4">
+          <label class="form-label">Precio</label>
+          <div class="input-group">
+            <input type="number" class="form-control"
+              placeholder="Min"
+              [(ngModel)]="filterPriceMin"
+              (ngModelChange)="applyFilters()">
 
-              <button
-                class="btn btn-sm btn-danger"
-                (click)="removeFromCart(product.productId!)"
-              >
-                Eliminar
-              </button>
-            </div>
+            <input type="number" class="form-control"
+              placeholder="Max"
+              [(ngModel)]="filterPriceMax"
+              (ngModelChange)="applyFilters()">
           </div>
         </div>
+
+        <div class="col-12 d-flex justify-content-between align-items-center">
+
+          <button class="btn btn-outline-secondary btn-sm"
+            (click)="clearFilters()">
+            ♻ Limpiar filtros
+          </button>
+
+          <span class="text-muted small">
+            <strong>{{ filteredProducts.length }}</strong> productos encontrados
+          </span>
+
+        </div>
+
       </div>
+
     </div>
   </div>
+
+  <!-- ================================= -->
+  <!-- GRID PRODUCTOS -->
+  <!-- ================================= -->
+  <div class="row g-4">
+
+    <div *ngFor="let product of paginatedProducts" class="col-12 col-md-6 col-lg-4">
+
+      <div class="card h-100 border-0 shadow-sm product-card"
+        [class.opacity-75]="product.quantity === 0">
+
+        <!-- IMAGE -->
+        <div class="position-relative">
+
+          <img
+            [src]="product.imageUrl"
+            class="card-img-top"
+            alt="{{ product.productName }}"
+            style="height: 260px; object-fit: cover;"
+            [class.opacity-50]="product.quantity === 0"
+          />
+
+          <!-- OUT OF STOCK -->
+          <span *ngIf="product.quantity === 0"
+            class="position-absolute top-0 start-0 m-2 badge bg-danger">
+            Agotado
+          </span>
+
+        </div>
+
+        <!-- BODY -->
+        <div class="card-body d-flex flex-column">
+
+          <h5 class="fw-bold mb-1">{{ product.productName }}</h5>
+
+          <small class="text-muted" *ngIf="product.author">
+            {{ product.author }}
+          </small>
+
+          <!-- PRICE -->
+          <div class="mt-3">
+
+            <span *ngIf="getDiscountForProduct(product); else normalPrice">
+
+              <del class="text-muted">
+                S/ {{ product.price | number:'1.2-2' }}
+              </del>
+
+              <div class="fw-bold text-success">
+                S/ {{ getDiscountedPrice(product) | number:'1.2-2' }}
+                <span class="badge bg-success ms-1">
+                  -{{ getDiscountForProduct(product) }}%
+                </span>
+              </div>
+
+            </span>
+
+            <ng-template #normalPrice>
+              <div class="fw-bold">
+                S/ {{ product.price | number:'1.2-2' }}
+              </div>
+            </ng-template>
+
+          </div>
+
+          <!-- BUTTON -->
+          <div class="mt-auto pt-3">
+
+            <button
+              class="btn btn-primary w-100"
+              [routerLink]="['/product', product.productId]"
+              [disabled]="product.quantity === 0">
+
+              Ver detalle
+
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ================================= -->
+  <!-- PAGINACIÓN -->
+  <!-- ================================= -->
+  <div class="card border-0 shadow-sm mt-4" *ngIf="totalPages > 1">
+
+    <div class="card-body">
+
+      <nav>
+        <ul class="pagination justify-content-center mb-0">
+
+          <li class="page-item" [class.disabled]="currentPage === 1">
+            <a class="page-link" (click)="goToPage(1)">«</a>
+          </li>
+
+          <li class="page-item"
+            *ngFor="let page of getPageNumbers()"
+            [class.active]="page === currentPage">
+
+            <a class="page-link" (click)="goToPage(page)">
+              {{ page }}
+            </a>
+
+          </li>
+
+          <li class="page-item" [class.disabled]="currentPage === totalPages">
+            <a class="page-link" (click)="goToPage(totalPages)">»</a>
+          </li>
+
+        </ul>
+      </nav>
+
+      <div class="text-center text-muted small mt-2">
+        Página {{ currentPage }} de {{ totalPages }}
+      </div>
+
+    </div>
+
+  </div>
+
 </div>

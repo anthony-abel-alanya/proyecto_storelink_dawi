@@ -13,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.proyecto.shop.StoreLink.Model.Customer;
+import com.proyecto.shop.StoreLink.Model.UserInfo;
 import com.proyecto.shop.StoreLink.Service.CustomerService;
 import com.proyecto.shop.StoreLink.Exception.ResourceNotFoundException;
 
@@ -104,6 +105,34 @@ public class CustomerController {
                     logger.warn("Customer not found with email: {}", email);
                     return new ResourceNotFoundException("Customer not found with email: " + email);
                 });
+    }
+
+    // Get all users (excluding admin) - para gestión de cuentas
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/users/list")
+    public ResponseEntity<List<UserInfo>> getAllUsersExcludingAdmin() {
+        logger.info("Fetching all users excluding admin...");
+        List<UserInfo> users = customerService.getAllUsersExcludingAdmin();
+        logger.info("Found {} users (excluding admin).", users.size());
+        return ResponseEntity.ok(users);
+    }
+
+    // Toggle user enabled status (bloquear/desbloquear)
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PutMapping("/users/{id}/toggle-status")
+    public ResponseEntity<?> toggleUserStatus(@PathVariable int id) {
+        logger.info("Toggling user status for ID: {}", id);
+        try {
+            UserInfo user = customerService.toggleUserStatus(id);
+            logger.info("User status toggled successfully for ID: {}", id);
+            return ResponseEntity.ok(user);
+        } catch (IllegalArgumentException e) {
+            logger.warn("Error toggling user status: {}", e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (ResourceNotFoundException e) {
+            logger.warn("User not found: {}", e.getMessage());
+            return ResponseEntity.notFound().build();
+        }
     }
 
 }

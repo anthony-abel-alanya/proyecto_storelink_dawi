@@ -20,6 +20,10 @@ export class CategoryService {
     return this.http.post<Category>(this.baseUrl, category);
   }
 
+  updateCategory(id: number, category: Category): Observable<Category> {
+    return this.http.put<Category>(`${this.baseUrl}/${id}`, category);
+  }
+
   deleteCategory(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }

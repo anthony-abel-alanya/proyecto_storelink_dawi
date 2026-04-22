@@ -1,33 +1,46 @@
-<div class="container my-5">
-  <h2 class="text-center mb-4">¡Bienvenido al Panel de Administración!</h2>
+<div class="container py-5">
 
-  <h6 class="text-center mb-4">
-    Administra inventario, pedidos y clientes en un solo lugar
-  </h6>
+  <!-- Header -->
+  <div class="text-center mb-5">
+    <h2 class="fw-bold mb-2">Panel de Administración</h2>
+    <p class="text-muted mb-0">
+      Administra inventario, pedidos y clientes en un solo lugar
+    </p>
+  </div>
 
+  <!-- First Row -->
   <div class="row g-4 justify-content-center">
+
     <!-- Add Inventory -->
-    <div class="col-md-3">
-      <div class="card text-center shadow-sm">
-        <div class="card-body">
-          <i class="bi bi-box-seam display-4 text-dark"></i>
-          <h5 class="card-title mt-3">Agregar Inventario</h5>
-          <p class="card-text">Agrega nuevos artículos a tu inventario.</p>
-          <button class="btn btn-primary w-100" (click)="addProduct()">
+    <div class="col-lg-3 col-md-4 col-sm-6">
+      <div class="card border-0 shadow-sm h-100 text-center p-3 hover-shadow">
+        <div class="card-body d-flex flex-column">
+          <div class="mb-3">
+            <i class="bi bi-box-seam fs-1 text-primary"></i>
+          </div>
+          <h5 class="fw-semibold">Agregar Inventario</h5>
+          <p class="text-muted small flex-grow-1">
+            Agrega nuevos artículos a tu inventario.
+          </p>
+          <button class="btn btn-primary mt-auto w-100" (click)="addProduct()">
             Ir
           </button>
         </div>
       </div>
     </div>
 
-    <!-- Update Product -->
-    <div class="col-md-3">
-      <div class="card text-center shadow-sm">
-        <div class="card-body">
-          <i class="bi bi-pencil-square display-4 text-dark"></i>
-          <h5 class="card-title mt-3">Actualizar Producto</h5>
-          <p class="card-text">Modifica detalles del producto o precios.</p>
-          <button class="btn btn-primary w-100" (click)="updateProduct()">
+    <!-- Product Management -->
+    <div class="col-lg-3 col-md-4 col-sm-6">
+      <div class="card border-0 shadow-sm h-100 text-center p-3">
+        <div class="card-body d-flex flex-column">
+          <div class="mb-3">
+            <i class="bi bi-pencil-square fs-1 text-primary"></i>
+          </div>
+          <h5 class="fw-semibold">Gestión de Productos</h5>
+          <p class="text-muted small flex-grow-1">
+            Busca, filtra y edita productos del inventario.
+          </p>
+          <button class="btn btn-primary mt-auto w-100" (click)="updateProduct()">
             Ir
           </button>
         </div>
@@ -35,75 +48,82 @@
     </div>
 
     <!-- Promotions -->
-    <div class="col-md-3">
-      <div class="card text-center shadow-sm">
-        <div class="card-body">
-          <i class="bi bi-megaphone-fill display-4 text-dark"></i>
-          <h5 class="card-title mt-3">Promociones</h5>
-          <p class="card-text">Crea o administra campañas de descuento.</p>
-          <button class="btn btn-primary w-100" (click)="promotions()">
+    <div class="col-lg-3 col-md-4 col-sm-6">
+      <div class="card border-0 shadow-sm h-100 text-center p-3">
+        <div class="card-body d-flex flex-column">
+          <div class="mb-3">
+            <i class="bi bi-megaphone-fill fs-1 text-primary"></i>
+          </div>
+          <h5 class="fw-semibold">Promociones</h5>
+          <p class="text-muted small flex-grow-1">
+            Crea o administra campañas de descuento.
+          </p>
+          <button class="btn btn-primary mt-auto w-100" (click)="promotions()">
             Ir
           </button>
         </div>
       </div>
     </div>
 
-    <!-- Category Management -->
-    <div class="col-md-3">
-      <div class="card text-center shadow-sm">
-        <div class="card-body">
-          <i class="bi bi-tags-fill display-4 text-dark"></i>
-          <h5 class="card-title mt-3">Categorías</h5>
-          <p class="card-text">Administra nombres de categorías de productos utilizados por promociones.</p>
-          <button class="btn btn-primary w-100" (click)="categoryManagement()">
+    <!-- Categories -->
+    <div class="col-lg-3 col-md-4 col-sm-6">
+      <div class="card border-0 shadow-sm h-100 text-center p-3">
+        <div class="card-body d-flex flex-column">
+          <div class="mb-3">
+            <i class="bi bi-tags-fill fs-1 text-primary"></i>
+          </div>
+          <h5 class="fw-semibold">Categorías</h5>
+          <p class="text-muted small flex-grow-1">
+            Administra categorías usadas en promociones.
+          </p>
+          <button class="btn btn-primary mt-auto w-100" (click)="categoryManagement()">
             Ir
           </button>
         </div>
       </div>
     </div>
+
   </div>
 
-  <div class="row g-4 justify-content-center">
-    <!-- List of products -->
-    <div class="col-md-3">
-      <div class="card text-center shadow-sm">
-        <div class="card-body">
-          <i class="bi bi-journal-text display-4 text-dark"></i>
-          <h5 class="card-title mt-3">Administrar Productos</h5>
-          <p class="card-text">Ver lista de productos disponibles en la tienda.</p>
-          <button class="btn btn-primary w-100" (click)="productsList()">
+  <!-- Second Row -->
+  <div class="row g-4 justify-content-center mt-1">
+
+    <!-- Orders -->
+    <div class="col-lg-3 col-md-4 col-sm-6">
+      <div class="card border-0 shadow-sm h-100 text-center p-3">
+        <div class="card-body d-flex flex-column">
+          <div class="mb-3">
+            <i class="bi bi-box2 fs-1 text-primary"></i>
+          </div>
+          <h5 class="fw-semibold">Pedidos</h5>
+          <p class="text-muted small flex-grow-1">
+            Administra el estado de pedidos de clientes.
+          </p>
+          <button class="btn btn-primary mt-auto w-100" (click)="updateOrderStatus()">
             Ir
           </button>
         </div>
       </div>
     </div>
 
-    <!-- Update Order Status -->
-    <div class="col-md-3">
-      <div class="card text-center shadow-sm">
-        <div class="card-body">
-          <i class="bi bi-box2 display-4 text-dark"></i>
-          <h5 class="card-title mt-3">Actualizar Estado del Pedido</h5>
-          <p class="card-text">Modifica y administra el estado de los pedidos de los clientes.</p>
-          <button class="btn btn-primary w-100" (click)="updateOrderStatus()">
+    <!-- Users -->
+    <div class="col-lg-3 col-md-4 col-sm-6">
+      <div class="card border-0 shadow-sm h-100 text-center p-3">
+        <div class="card-body d-flex flex-column">
+          <div class="mb-3">
+            <i class="bi bi-person-lines-fill fs-1 text-primary"></i>
+          </div>
+          <h5 class="fw-semibold">Usuarios</h5>
+          <p class="text-muted small flex-grow-1">
+            Administra cuentas de clientes.
+          </p>
+          <button class="btn btn-primary mt-auto w-100" (click)="manageUsers()">
             Ir
           </button>
         </div>
       </div>
     </div>
 
-    <!-- Manage Users -->
-    <div class="col-md-3">
-      <div class="card text-center shadow-sm">
-        <div class="card-body">
-          <i class="bi bi-person-lines-fill display-4 text-dark"></i>
-          <h5 class="card-title mt-3">Administrar Cuentas de Usuario</h5>
-          <p class="card-text">Suspende o administra cuentas de clientes.</p>
-          <button class="btn btn-primary w-100" (click)="manageUsers()">
-            Ir
-          </button>
-        </div>
-      </div>
-    </div>
   </div>
+
 </div>

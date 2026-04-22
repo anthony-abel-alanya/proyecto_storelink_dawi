@@ -1,0 +1,191 @@
+<div class="container py-5">
+
+  <!-- ================================= -->
+  <!-- LOADING -->
+  <!-- ================================= -->
+  <div *ngIf="loading" class="text-center py-5">
+
+    <div class="spinner-border text-primary mb-3"></div>
+    <h6 class="text-muted">Cargando producto...</h6>
+
+  </div>
+
+  <!-- ================================= -->
+  <!-- ERROR -->
+  <!-- ================================= -->
+  <div *ngIf="errorMessage" class="alert alert-danger text-center shadow-sm">
+    {{ errorMessage }}
+  </div>
+
+  <!-- ================================= -->
+  <!-- PRODUCT DETAIL -->
+  <!-- ================================= -->
+  <div *ngIf="!loading && product" class="row g-4">
+
+    <!-- IMAGE -->
+    <div class="col-lg-5">
+
+      <div class="card border-0 shadow-sm">
+
+        <div class="position-relative">
+
+          <img
+            [src]="product.imageUrl"
+            class="img-fluid w-100"
+            [alt]="product.productName"
+            style="height: 500px; object-fit: cover;"
+          />
+
+          <span *ngIf="product.quantity === 0"
+            class="position-absolute top-0 start-0 m-2 badge bg-danger">
+            Agotado
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- INFO -->
+    <div class="col-lg-7">
+
+      <div class="card border-0 shadow-sm h-100">
+
+        <div class="card-body d-flex flex-column">
+
+          <!-- TITLE -->
+          <h2 class="fw-bold mb-1">{{ product.productName }}</h2>
+
+          <p class="text-muted mb-3" *ngIf="product.author">
+            ✍ {{ product.author }}
+          </p>
+
+          <hr>
+
+          <!-- PRICE -->
+          <div class="mb-4">
+
+            <div class="text-muted small">Precio</div>
+
+            <span *ngIf="getDiscountForProduct(); else normalPrice">
+
+              <del class="text-muted">
+                S/ {{ product.price | number:'1.2-2' }}
+              </del>
+
+              <div class="fs-3 fw-bold text-success">
+                S/ {{ getDiscountedPrice() | number:'1.2-2' }}
+                <span class="badge bg-success ms-2">
+                  -{{ getDiscountForProduct() }}%
+                </span>
+              </div>
+
+            </span>
+
+            <ng-template #normalPrice>
+              <div class="fs-3 fw-bold text-success">
+                S/ {{ product.price | number:'1.2-2' }}
+              </div>
+            </ng-template>
+
+          </div>
+
+          <!-- STOCK -->
+          <div class="mb-3">
+
+            <span class="text-muted">Stock:</span>
+
+            <span *ngIf="product.quantity > 0"
+              class="badge bg-success ms-2">
+              {{ product.quantity }} disponibles
+            </span>
+
+            <span *ngIf="product.quantity === 0"
+              class="badge bg-danger ms-2">
+              Agotado
+            </span>
+
+          </div>
+
+          <!-- DESCRIPTION -->
+          <div class="mb-4" *ngIf="product.description">
+
+            <h6 class="fw-semibold">Descripción</h6>
+
+            <p class="text-muted mb-0">
+              {{ product.description }}
+            </p>
+
+          </div>
+
+          <hr>
+
+          <!-- CART SECTION -->
+          <div class="mt-auto">
+
+            <div *ngIf="product.quantity > 0">
+
+              <!-- NOT IN CART -->
+              <button
+                *ngIf="!isInCart()"
+                class="btn btn-primary btn-lg w-100 shadow-sm"
+                (click)="addToCart()">
+                🛒 Agregar al carrito
+              </button>
+
+              <!-- IN CART -->
+              <div *ngIf="isInCart()"
+                class="d-flex align-items-center justify-content-between gap-2 p-3 bg-light rounded">
+
+                <button class="btn btn-outline-secondary"
+                  (click)="decrement()">
+                  −
+                </button>
+
+                <span class="fw-bold fs-5">
+                  {{ getCartQuantity() }} en carrito
+                </span>
+
+                <button class="btn btn-outline-secondary"
+                  (click)="increment()"
+                  [disabled]="getCartQuantity() >= product.quantity!">
+                  +
+                </button>
+
+                <button class="btn btn-outline-danger"
+                  (click)="removeFromCart()">
+                  Eliminar
+                </button>
+
+              </div>
+
+            </div>
+
+            <!-- OUT OF STOCK -->
+            <div *ngIf="product.quantity === 0"
+              class="alert alert-warning text-center mt-3 mb-0">
+              Producto no disponible actualmente
+            </div>
+
+          </div>
+
+          <!-- BACK -->
+          <div class="text-center mt-4">
+
+            <a routerLink="/home"
+              class="btn btn-outline-secondary">
+              ← Volver a la tienda
+            </a>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

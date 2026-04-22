@@ -61,7 +61,7 @@
       </div>
     </div>
 
-    <div class="mb-3">
+    <!--<div class="mb-3">
       <label>OTP (para verificación)</label>
       <input
         type="text"
@@ -71,6 +71,11 @@
         maxlength="6"
         required
       />
+    </div>-->
+
+    <div class="mb-3 d-none">
+    <label>OTP</label>
+    <input type="text" [(ngModel)]="payment.otp" name="otp">
     </div>
 
     <div class="mb-3">

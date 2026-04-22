@@ -1,144 +1,183 @@
-<div class="container my-5">
-  <h2 class="text-center mb-4">Agregar Nuevo Producto</h2>
+<div class="container py-5">
 
-  <form
-    #productForm="ngForm"
-    (ngSubmit)="onSubmit(productForm)"
-    class="p-4 border rounded shadow-sm bg-light"
-  >
-    <!-- Product Name -->
-    <div class="mb-3">
-      <label class="form-label">Nombre del Producto</label>
-      <input
-        type="text"
-        name="productName"
-        [(ngModel)]="product.productName"
-        required
-        minlength="3"
-        #productName="ngModel"
-        class="form-control"
-        [ngClass]="{ 'is-invalid': submitted && productName.invalid }"
-      />
-      <div class="invalid-feedback" *ngIf="submitted && productName.errors">
-        <div *ngIf="productName.errors['required']">
-          El nombre del producto es obligatorio.
-        </div>
-        <div *ngIf="productName.errors['minlength']">
-          Debe tener al menos 3 caracteres.
-        </div>
-      </div>
-    </div>
-
-    <!-- Category -->
-    <div class="mb-3">
-  <label class="form-label">Categoría</label>
-  <select
-    name="categoryId"
-    [(ngModel)]="product.categoryId"
-    required
-    #category="ngModel"
-    class="form-select"
-    [ngClass]="{ 'is-invalid': submitted && category.invalid }"
-  >
-    <option [ngValue]="0" disabled>Seleccionar una categoría</option>
-    
-    <option *ngFor="let c of categories" [ngValue]="c.id">
-      {{ c.name }}
-    </option>
-  </select>
-  <div class="invalid-feedback" *ngIf="submitted && category.errors">
-    <div *ngIf="category.errors['required']">La categoría es obligatoria.</div>
+  <!-- Header -->
+  <div class="text-center mb-4">
+    <h2 class="fw-bold mb-1">Agregar Producto</h2>
+    <p class="text-muted mb-0">Completa la información del nuevo producto</p>
   </div>
-</div>
 
-    <!-- Description -->
-    <div class="mb-3">
-      <label class="form-label">Descripción (opcional)</label>
-      <textarea
-        name="description"
-        [(ngModel)]="product.description"
-        class="form-control"
-      ></textarea>
-    </div>
+  <!-- Form Card -->
+  <div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8">
+      <form
+        #productForm="ngForm"
+        (ngSubmit)="onSubmit(productForm)"
+        class="card border-0 shadow-sm p-4"
+      >
 
-    <!-- Price -->
-    <div class="mb-3">
-      <label class="form-label">Precio</label>
-      <input
-        type="number"
-        name="price"
-        [(ngModel)]="product.price"
-        required
-        min="0.01"
-        #price="ngModel"
-        class="form-control"
-        [ngClass]="{ 'is-invalid': submitted && price.invalid }"
-      />
-      <div class="invalid-feedback" *ngIf="submitted && price.errors">
-        <div *ngIf="price.errors['required']">El precio es obligatorio.</div>
-        <div *ngIf="price.errors['min']">El precio debe ser mayor a 0.</div>
-      </div>
-    </div>
-
-    <!-- Quantity -->
-    <div class="mb-3">
-      <label class="form-label">Cantidad</label>
-      <input
-        type="number"
-        name="quantity"
-        [(ngModel)]="product.quantity"
-        required
-        min="1"
-        #quantity="ngModel"
-        class="form-control"
-        [ngClass]="{ 'is-invalid': submitted && quantity.invalid }"
-      />
-      <div class="invalid-feedback" *ngIf="submitted && quantity.errors">
-        <div *ngIf="quantity.errors['required']">La cantidad es obligatoria.</div>
-        <div *ngIf="quantity.errors['min']">La cantidad debe ser al menos 1.</div>
-      </div>
-    </div>
-
-    <!-- Image URL -->
-    <div class="mb-3">
-      <label class="form-label">URL de la Imagen</label>
-      <input
-        type="text"
-        name="imageUrl"
-        [(ngModel)]="product.imageUrl"
-        required
-        pattern="https?://.+"
-        #imageUrl="ngModel"
-        class="form-control"
-        [ngClass]="{ 'is-invalid': submitted && imageUrl.invalid }"
-      />
-      <div class="invalid-feedback" *ngIf="submitted && imageUrl.errors">
-        <div *ngIf="imageUrl.errors['required']">La URL de la imagen es obligatoria.</div>
-        <div *ngIf="imageUrl.errors['pattern']">
-          Por favor ingresa una URL válida (http/https).
+        <!-- Product Name -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Nombre del Producto</label>
+          <input
+            type="text"
+            name="productName"
+            [(ngModel)]="product.productName"
+            required
+            minlength="3"
+            #productName="ngModel"
+            class="form-control form-control-lg"
+            placeholder="Coloca un nombre descriptivo"
+            [ngClass]="{ 'is-invalid': submitted && productName.invalid }"
+          />
+          <div class="invalid-feedback" *ngIf="submitted && productName.errors">
+            <div *ngIf="productName.errors['required']">
+              El nombre del producto es obligatorio.
+            </div>
+            <div *ngIf="productName.errors['minlength']">
+              Debe tener al menos 3 caracteres.
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
 
-    <!-- Image Preview -->
-    <div *ngIf="product.imageUrl" class="text-center mb-3">
-      <img
-        [src]="product.imageUrl"
-        alt="Vista Previa"
-        class="img-fluid rounded"
-        style="max-width: 150px"
-      />
-    </div>
+        <!-- Category -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Categoría</label>
+          <select
+            name="categoryId"
+            [(ngModel)]="product.categoryId"
+            required
+            #category="ngModel"
+            class="form-select form-select-lg"
+            [ngClass]="{ 'is-invalid': submitted && category.invalid }"
+          >
+            <option [ngValue]="0" disabled>Seleccionar una categoría</option>
 
-    <!-- Submit Button -->
-    <button type="submit" class="btn btn-primary w-100">Crear Producto</button>
+            <option *ngFor="let c of categories" [ngValue]="c.id">
+              {{ c.name }}
+            </option>
+          </select>
 
-    <!-- Alerts -->
-    <div *ngIf="successMessage" class="alert alert-success mt-3">
-      {{ successMessage }}
+          <div class="invalid-feedback" *ngIf="submitted && category.errors">
+            <div *ngIf="category.errors['required']">
+              La categoría es obligatoria.
+            </div>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Descripción</label>
+          <textarea
+            name="description"
+            [(ngModel)]="product.description"
+            class="form-control"
+            rows="3"
+            placeholder="Descripción opcional del producto"
+          ></textarea>
+        </div>
+
+        <!-- Author -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Autor</label>
+          <input
+            type="text"
+            name="author"
+            [(ngModel)]="product.author"
+            class="form-control"
+            placeholder="Nombre del autor del libro"
+          />
+        </div>
+
+        <!-- Price & Quantity -->
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-semibold">Precio</label>
+            <input
+              type="number"
+              name="price"
+              [(ngModel)]="product.price"
+              required
+              min="0.01"
+              #price="ngModel"
+              class="form-control"
+              placeholder="0.00"
+              [ngClass]="{ 'is-invalid': submitted && price.invalid }"
+            />
+            <div class="invalid-feedback" *ngIf="submitted && price.errors">
+              <div *ngIf="price.errors['required']">El precio es obligatorio.</div>
+              <div *ngIf="price.errors['min']">Debe ser mayor a 0.</div>
+            </div>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-semibold">Cantidad</label>
+            <input
+              type="number"
+              name="quantity"
+              [(ngModel)]="product.quantity"
+              required
+              min="1"
+              #quantity="ngModel"
+              class="form-control"
+              placeholder="Stock disponible"
+              [ngClass]="{ 'is-invalid': submitted && quantity.invalid }"
+            />
+            <div class="invalid-feedback" *ngIf="submitted && quantity.errors">
+              <div *ngIf="quantity.errors['required']">La cantidad es obligatoria.</div>
+              <div *ngIf="quantity.errors['min']">Mínimo 1.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Image URL -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Imagen (URL)</label>
+          <input
+            type="text"
+            name="imageUrl"
+            [(ngModel)]="product.imageUrl"
+            required
+            pattern="https?://.+"
+            #imageUrl="ngModel"
+            class="form-control"
+            placeholder="https://ejemplo.com/imagen.jpg"
+            [ngClass]="{ 'is-invalid': submitted && imageUrl.invalid }"
+          />
+          <div class="invalid-feedback" *ngIf="submitted && imageUrl.errors">
+            <div *ngIf="imageUrl.errors['required']">La imagen es obligatoria.</div>
+            <div *ngIf="imageUrl.errors['pattern']">URL inválida.</div>
+          </div>
+        </div>
+
+        <!-- Image Preview -->
+        <div *ngIf="product.imageUrl" class="text-center mb-4">
+          <div class="border rounded p-2 bg-light d-inline-block shadow-sm">
+            <img
+              [src]="product.imageUrl"
+              alt="Vista Previa"
+              class="img-fluid rounded"
+              style="max-height: 150px"
+            />
+          </div>
+          <div class="text-muted small mt-2">Vista previa</div>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" class="btn btn-primary btn-lg w-100 fw-semibold">
+          Crear Producto
+        </button>
+
+        <!-- Alerts -->
+        <div *ngIf="successMessage" class="alert alert-success mt-3 text-center">
+          {{ successMessage }}
+        </div>
+
+        <div *ngIf="errorMessage" class="alert alert-danger mt-3 text-center">
+          {{ errorMessage }}
+        </div>
+
+      </form>
     </div>
-    <div *ngIf="errorMessage" class="alert alert-danger mt-3">
-      {{ errorMessage }}
-    </div>
-  </form>
+  </div>
+
 </div>

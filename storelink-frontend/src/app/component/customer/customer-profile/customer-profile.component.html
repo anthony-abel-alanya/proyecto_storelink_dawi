@@ -1,12 +1,67 @@
-<div *ngIf="!loading && customer" class="card mt-4 shadow-sm p-3">
-  <h4 class="text-primary mb-3">Mi Perfil</h4>
+<div class="container py-4">
 
-  <p><strong>Nombre:</strong> {{ customer.name }}</p>
-  <p><strong>Correo Electrónico:</strong> {{ customer.email }}</p>
-  <p><strong>Teléfono:</strong> {{ customer.phone }}</p>
-</div>
+  <!-- ================================= -->
+  <!-- LOADING -->
+  <!-- ================================= -->
+  <div *ngIf="loading" class="text-center py-5">
 
-<div *ngIf="loading" class="text-center mt-4">
-  <div class="spinner-border text-primary" role="status"></div>
-  <p class="mt-2">Cargando perfil...</p>
+    <div class="spinner-border text-primary mb-3" role="status"></div>
+
+    <h6 class="text-muted">Cargando perfil...</h6>
+
+  </div>
+
+  <!-- ================================= -->
+  <!-- PERFIL -->
+  <!-- ================================= -->
+  <div *ngIf="!loading && customer" class="row justify-content-center">
+
+    <div class="col-lg-6">
+
+      <div class="card border-0 shadow-sm">
+
+        <!-- HEADER -->
+        <div class="card-header bg-primary text-white text-center">
+          <h5 class="mb-0">👤 Mi Perfil</h5>
+        </div>
+
+        <!-- BODY -->
+        <div class="card-body text-center">
+
+          <!-- AVATAR -->
+          <div class="mb-3">
+            <div class="rounded-circle bg-light d-inline-flex align-items-center justify-content-center"
+              style="width: 90px; height: 90px; font-size: 32px;">
+              👤
+            </div>
+          </div>
+
+          <h5 class="fw-bold mb-1">{{ customer.name }}</h5>
+          <p class="text-muted mb-4">Usuario del sistema</p>
+
+          <hr>
+
+          <!-- INFO -->
+          <div class="text-start">
+
+            <div class="d-flex justify-content-between py-2 border-bottom">
+              <span class="text-muted">📧 Correo</span>
+              <span class="fw-semibold">{{ customer.email }}</span>
+            </div>
+
+            <div class="d-flex justify-content-between py-2 border-bottom">
+              <span class="text-muted">📱 Teléfono</span>
+              <span class="fw-semibold">{{ customer.phone }}</span>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
 </div>

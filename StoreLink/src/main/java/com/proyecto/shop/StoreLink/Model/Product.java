@@ -33,6 +33,10 @@ public class Product {
     @Size(max = 255, message = "Description can't be more than 255 characters!")
     private String description;
 
+    @Column(name = "author", length = 100)
+    @Size(max = 100, message = "Author can't be more than 100 characters!")
+    private String author;
+
     @Column(name = "price", precision = 10, scale = 2)
     @Positive(message = "Price can't be 0 or less!")
     @NotNull(message = "Price can't be null!")

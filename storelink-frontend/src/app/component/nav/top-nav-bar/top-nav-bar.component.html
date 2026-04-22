@@ -1,86 +1,120 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary px-4 fixed-top">
-  <div class="container-fluid">
-    <!-- Left side: Home -->
-    <img
-      src="assets/storelink.png"
-      alt="StoreLink Logo"
-      width="40"
-      height="40"
-      class="me-2 rounded-circle border border-light"
-    />
-    <a class="navbar-brand" *ngIf="!isAdminLoggedIn()" routerLink="/home">
-      StoreLink</a
-    >
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm fixed-top py-2">
+  <div class="container-fluid px-4">
 
-    <a class="navbar-brand" *ngIf="isAdminLoggedIn()" routerLink="/admin-home">
-      StoreLink</a
-    >
+    <!-- Logo + Brand -->
+    <div class="d-flex align-items-center">
+      <img
+        src="assets/storelink.png"
+        alt="StoreLink Logo"
+        width="42"
+        height="42"
+        class="me-2 rounded-circle border border-2 border-white shadow-sm"
+      />
 
-    <!-- Right side: Login/Signup or Profile dropdown -->
+      <a class="navbar-brand fw-semibold fs-5 mb-0" *ngIf="!isAdminLoggedIn()" routerLink="/home">
+        StoreLink
+      </a>
+
+      <a class="navbar-brand fw-semibold fs-5 mb-0" *ngIf="isAdminLoggedIn()" routerLink="/admin-home">
+        StoreLink
+      </a>
+    </div>
+
+    <!-- Toggle (mobile) -->
+    <button
+      class="navbar-toggler border-0 shadow-none"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNav"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Right side -->
     <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-      <ul class="navbar-nav">
-        <!-- If not logged in -->
-        <li class="nav-item" *ngIf="!isLoggedIn()">
-          <a class="navbar-brand" routerLink="/login">Iniciar Sesión</a>
-        </li>
-        <li class="nav-item" *ngIf="!isLoggedIn()">
-          <a class="navbar-brand" routerLink="/signup">Registrarse</a>
-        </li>
+      <ul class="navbar-nav align-items-center gap-2">
 
-        <!-- If logged in -->
-        <li
-          class="nav-item position-relative me-3"
-          *ngIf="isCustomerLoggedIn()"
-        >
-          <a class="navbar-brand" routerLink="/cart">
-            <i class="bi bi-cart"></i> Carrito
+        <!-- Not logged -->
+        <li class="nav-item" *ngIf="!isLoggedIn()">
+          <a class="btn btn-outline-light btn-sm px-3" routerLink="/login">
+            Iniciar Sesión
           </a>
         </li>
 
+        <li class="nav-item" *ngIf="!isLoggedIn()">
+          <a class="btn btn-light btn-sm text-primary fw-semibold px-3" routerLink="/signup">
+            Registrarse
+          </a>
+        </li>
+
+        <!-- Cart -->
+        <li class="nav-item position-relative" *ngIf="isCustomerLoggedIn()">
+          <a class="nav-link d-flex align-items-center gap-1" routerLink="/cart">
+            <i class="bi bi-cart fs-5"></i>
+            <span class="d-none d-lg-inline">Carrito</span>
+          </a>
+        </li>
+
+        <!-- Profile dropdown -->
         <li class="nav-item dropdown" *ngIf="isLoggedIn()">
           <a
-            class="navbar-brand dropdown-toggle"
+            class="nav-link dropdown-toggle d-flex align-items-center gap-2"
             href="#"
             id="profileDropdown"
             role="button"
             data-bs-toggle="dropdown"
-            aria-expanded="false"
           >
-            <i class="bi bi-person-circle"></i> Perfil
+            <i class="bi bi-person-circle fs-5"></i>
+            <span class="fw-semibold">
+              {{ getUserName() }}
+            </span>
+            <span class="badge bg-light text-primary small">
+              {{ getUserRole() }}
+            </span>
           </a>
-          <ul
-            class="dropdown-menu dropdown-menu-end"
-            aria-labelledby="profileDropdown"
-          >
+
+          <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
+            
             <li>
               <a
-                class="dropdown-item"
+                class="dropdown-item d-flex align-items-center gap-2"
                 *ngIf="!isAdminLoggedIn()"
                 routerLink="/profile"
-                ><i class="bi bi-person-fill"></i> Ver Perfil</a
               >
+                <i class="bi bi-person-fill text-primary"></i> Ver Perfil
+              </a>
             </li>
+
             <li>
               <a
-                class="dropdown-item"
+                class="dropdown-item d-flex align-items-center gap-2"
                 *ngIf="isCustomerLoggedIn()"
                 routerLink="/order-history"
-                ><i class="bi bi-clock-history"></i> Historial de Pedidos</a
               >
+                <i class="bi bi-clock-history text-primary"></i> Historial de Pedidos
+              </a>
             </li>
+
             <li>
-              <a class="dropdown-item" routerLink="/"
-                ><i class="bi bi-gear"></i> Configuración</a
-              >
+              <a class="dropdown-item d-flex align-items-center gap-2" routerLink="/profile">
+                <i class="bi bi-gear text-primary"></i> Configuración
+              </a>
             </li>
+
             <li><hr class="dropdown-divider" /></li>
+
             <li>
-              <a class="dropdown-item text-danger" (click)="logout()"
-                ><i class="bi bi-box-arrow-right"></i> Cerrar Sesión</a
+              <a
+                class="dropdown-item d-flex align-items-center gap-2 text-danger"
+                (click)="logout()"
               >
+                <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+              </a>
             </li>
+
           </ul>
         </li>
+
       </ul>
     </div>
   </div>

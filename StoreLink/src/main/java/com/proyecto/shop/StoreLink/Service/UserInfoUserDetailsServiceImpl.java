@@ -24,7 +24,8 @@ public class UserInfoUserDetailsServiceImpl implements UserDetailsService {
             .map(user-> new UserInfoUserDetails(
                 user.getEmail(),
                 user.getPassword(),
-                user.getAllRoles()
+                user.getAllRoles(),
+                user.isEnabled()
             ))
             .orElseThrow(() -> new UsernameNotFoundException(email + " not found"));
     }

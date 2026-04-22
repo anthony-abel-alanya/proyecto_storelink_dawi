@@ -15,6 +15,15 @@ export class CategoryManagementComponent implements OnInit {
   categories: Category[] = [];
   newCategory: Category = { name: '' };
 
+  // Edición
+  editingCategory: Category | null = null;
+  editedName: string = '';
+  isEditing = false;
+
+  // Mensajes
+  successMessage = '';
+  errorMessage = '';
+
   constructor(private categoryService: CategoryService) {}
 
   ngOnInit(): void {
@@ -29,21 +38,69 @@ export class CategoryManagementComponent implements OnInit {
   }
 
   createCategory(form: NgForm): void {
+    this.successMessage = '';
+    this.errorMessage = '';
+
     if (form.invalid) {
-      alert('Please enter a category name.');
+      this.errorMessage = 'Por favor ingrese un nombre de categoría.';
       return;
     }
 
     this.categoryService.createCategory(this.newCategory).subscribe({
       next: (category) => {
-        alert(`Category "${category.name}" created successfully!`);
+        this.successMessage = `Categoría "${category.name}" creada exitosamente!`;
         this.newCategory = { name: '' };
         form.resetForm();
         this.loadCategories();
       },
       error: (err) => {
         console.error('Failed to create category', err);
-        alert('Error creating category. It may already exist.');
+        this.errorMessage = 'Error al crear categoría. Ya podría existir.';
+      },
+    });
+  }
+
+  // Iniciar edición
+  startEdit(category: Category): void {
+    this.editingCategory = category;
+    this.editedName = category.name;
+    this.isEditing = true;
+    this.successMessage = '';
+    this.errorMessage = '';
+  }
+
+  // Cancelar edición
+  cancelEdit(): void {
+    this.editingCategory = null;
+    this.editedName = '';
+    this.isEditing = false;
+  }
+
+  // Guardar edición
+  saveEdit(): void {
+    if (!this.editingCategory || !this.editingCategory.id) {
+      return;
+    }
+
+    if (!this.editedName.trim()) {
+      this.errorMessage = 'El nombre no puede estar vacío.';
+      return;
+    }
+
+    const updatedCategory: Category = {
+      id: this.editingCategory.id,
+      name: this.editedName.trim()
+    };
+
+    this.categoryService.updateCategory(this.editingCategory.id, updatedCategory).subscribe({
+      next: (category) => {
+        this.successMessage = `Categoría "${category.name}" actualizada exitosamente!`;
+        this.cancelEdit();
+        this.loadCategories();
+      },
+      error: (err) => {
+        console.error('Failed to update category', err);
+        this.errorMessage = 'Error al actualizar categoría. Ya podría existir otro con ese nombre.';
       },
     });
   }
@@ -53,13 +110,13 @@ export class CategoryManagementComponent implements OnInit {
       return;
     }
 
-    if (!confirm(`Delete category "${category.name}"?`)) {
+    if (!confirm(`¿Eliminar categoría "${category.name}"?`)) {
       return;
     }
 
     this.categoryService.deleteCategory(category.id).subscribe({
       next: () => {
-        alert(`Category "${category.name}" deleted successfully.`);
+        this.successMessage = `Categoría "${category.name}" eliminada exitosamente.`;
         this.loadCategories();
       },
       error: (err) => console.error('Failed to delete category', err),

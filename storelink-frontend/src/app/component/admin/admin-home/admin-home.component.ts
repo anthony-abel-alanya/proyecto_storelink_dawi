@@ -28,15 +28,11 @@ export class AdminHomeComponent {
     this.router.navigate(['/categories']);
   }
 
-  productsList() {
-    this.router.navigate(['/manage-products']);
-  }
-
   updateOrderStatus() {
     this.router.navigate(['/order-status-update']);
   }
 
   manageUsers() {
-    this.router.navigate(['/customers-list']);
+    this.router.navigate(['/user-management']);
   }
 }

@@ -70,7 +70,8 @@ public class SecurityConfig {
 	        	                "/h2-console/**",
 	        	                "/api/customers/**",
 	        	                "/api/auth/**",
-	        	                "/api/products/**"
+	        	                "/api/products/**",
+	        	                "/api/categories/**"
 	        	                ).permitAll()
 	                    .anyRequest()
 	                    .authenticated()

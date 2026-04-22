@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Customer } from 'src/app/model/customer/customer';
+import { UserInfo } from 'src/app/model/user-info/user-info';
 import { environment } from 'src/environment/environment';
 
 @Injectable({
@@ -49,5 +50,18 @@ export class CustomerService {
   getCustomerByEmail(email: string): Observable<Customer> {
     const url = `${this.baseUrl}/email/${encodeURIComponent(email)}`;
     return this.http.get<Customer>(url);
+  }
+
+  /*************************************
+   * User Management (ADMIN only)
+   *************************************/
+  // Get all users excluding admin
+  getAllUsersExcludingAdmin(): Observable<UserInfo[]> {
+    return this.http.get<UserInfo[]>(`${this.baseUrl}/users/list`);
+  }
+
+  // Toggle user enabled status (block/unblock)
+  toggleUserStatus(userId: number): Observable<UserInfo> {
+    return this.http.put<UserInfo>(`${this.baseUrl}/users/${userId}/toggle-status`, {});
   }
 }

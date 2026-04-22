@@ -22,6 +22,9 @@ public class ProductRequest {
     @Size(max = 255, message = "Description can't be more than 255 characters!")
     private String description;
 
+    @Size(max = 100, message = "Author can't be more than 100 characters!")
+    private String author;
+
     @Positive(message = "Price can't be 0 or less!")
     @NotNull(message = "Price can't be null!")
     private BigDecimal price;
