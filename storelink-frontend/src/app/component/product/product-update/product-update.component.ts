@@ -14,18 +14,18 @@ import { Category } from 'src/app/model/category/category';
   styleUrls: ['./product-update.component.css'],
 })
 export class ProductUpdateComponent implements OnInit {
-  // Datos originales
+  // Original data
   allProducts: Product[] = [];
   categories: Category[] = [];
 
-  // Producto seleccionado para editar
+  // Product selected for editing
   selectedProduct: ProductRequest | null = null;
   selectedProductId: number | null = null;
   submitted = false;
   successMessage = '';
   errorMessage = '';
 
-  // Filtros de búsqueda
+  // Search filters
   filterName = '';
   filterCategory = '';
   filterPriceMin: number | null = null;
@@ -33,17 +33,17 @@ export class ProductUpdateComponent implements OnInit {
   filterStockMin: number | null = null;
   filterStockMax: number | null = null;
 
-  // Productos filtrados (para mostrar en la tabla)
+  // Filtered products (to display in the table)
   filteredProducts: Product[] = [];
 
-  // Paginación
+  // Pagination
   currentPage = 1;
   pageSize = 10;
   totalItems = 0;
   totalPages = 0;
   paginatedProducts: Product[] = [];
 
-  // Opciones de tamaño de página
+  // Page size options
   pageSizeOptions = [5, 10, 25, 50];
 
   constructor(
@@ -73,30 +73,30 @@ export class ProductUpdateComponent implements OnInit {
     });
   }
 
-  // Reiniciar paginación al editar (para actualizar la tabla)
+  // Reset pagination when editing (to update the table)
   refreshTable(): void {
     this.loadAllProducts();
   }
 
-  // Aplicar filtros en tiempo real
+  // Apply filters in real time
   applyFilters(): void {
     this.filteredProducts = this.allProducts.filter(product => {
-      // Filtro por nombre (búsqueda parcial, case-insensitive)
+      // Filter by name (partial search, case-insensitive)
       const matchesName = !this.filterName || 
         product.productName.toLowerCase().includes(this.filterName.toLowerCase());
 
-      // Filtro por categoría
+      // Filter by category
       const matchesCategory = !this.filterCategory || 
         product.categoryName?.toLowerCase() === this.filterCategory.toLowerCase();
 
-      // Filtro por rango de precio
+      // Filter by price range
       const matchesPriceMin = this.filterPriceMin === null || 
         product.price >= this.filterPriceMin;
       const matchesPriceMax = this.filterPriceMax === null || 
         product.price <= this.filterPriceMax;
       const matchesPrice = matchesPriceMin && matchesPriceMax;
 
-      // Filtro por rango de stock
+      // Filter by stock range
       const matchesStockMin = this.filterStockMin === null || 
         product.quantity >= this.filterStockMin;
       const matchesStockMax = this.filterStockMax === null || 
@@ -106,12 +106,12 @@ export class ProductUpdateComponent implements OnInit {
       return matchesName && matchesCategory && matchesPrice && matchesStock;
     });
 
-    // Resetear a primera página al aplicar filtros
+    // Reset pagination when applying filters
     this.currentPage = 1;
     this.updatePagination();
   }
 
-  // Actualizar paginación
+  // Update pagination
   updatePagination(): void {
     this.totalItems = this.filteredProducts.length;
     this.totalPages = Math.ceil(this.totalItems / this.pageSize) || 1;
@@ -121,7 +121,7 @@ export class ProductUpdateComponent implements OnInit {
     this.paginatedProducts = this.filteredProducts.slice(startIndex, endIndex);
   }
 
-  // Cambiar de página
+  // Change page
   goToPage(page: number): void {
     if (page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
@@ -129,13 +129,13 @@ export class ProductUpdateComponent implements OnInit {
     }
   }
 
-  // Cambiar tamaño de página
+  // Change page size
   onPageSizeChange(): void {
     this.currentPage = 1;
     this.updatePagination();
   }
 
-  // Obtener números de página para mostrar
+  // Get page numbers to display
   getPageNumbers(): number[] {
     const pages: number[] = [];
     const maxVisible = 5;
@@ -153,7 +153,7 @@ export class ProductUpdateComponent implements OnInit {
     return pages;
   }
 
-  // Limpiar todos los filtros
+  // Clear all filters
   clearFilters(): void {
     this.filterName = '';
     this.filterCategory = '';
@@ -164,7 +164,7 @@ export class ProductUpdateComponent implements OnInit {
     this.applyFilters();
   }
 
-  // Seleccionar producto para editar
+  // Select product to edit
   editProduct(product: Product): void {
     this.selectedProductId = product.productId ?? null;
     this.selectedProduct = {
@@ -177,7 +177,7 @@ export class ProductUpdateComponent implements OnInit {
       categoryId: 0
     };
 
-    // Buscar el ID de categoría por nombre
+    // Search for category ID by name
     const category = this.categories.find(c => c.name === product.categoryName);
     if (category && category.id) {
       this.selectedProduct.categoryId = category.id;
@@ -187,13 +187,13 @@ export class ProductUpdateComponent implements OnInit {
     this.errorMessage = '';
     this.submitted = false;
 
-    // Scroll al formulario
+    // Scroll to the form
     setTimeout(() => {
       document.getElementById('edit-form')?.scrollIntoView({ behavior: 'smooth' });
     }, 100);
   }
 
-  // Cancelar edición
+  // Cancel edit
   cancelEdit(): void {
     this.selectedProduct = null;
     this.selectedProductId = null;
@@ -202,7 +202,7 @@ export class ProductUpdateComponent implements OnInit {
     this.errorMessage = '';
   }
 
-  // Guardar cambios
+  // Save changes
   onSubmit(form: NgForm): void {
     this.submitted = true;
     this.successMessage = '';

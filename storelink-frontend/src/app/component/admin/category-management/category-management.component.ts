@@ -15,12 +15,12 @@ export class CategoryManagementComponent implements OnInit {
   categories: Category[] = [];
   newCategory: Category = { name: '' };
 
-  // Edición
+  // Edition
   editingCategory: Category | null = null;
   editedName: string = '';
   isEditing = false;
 
-  // Mensajes
+  // Messages
   successMessage = '';
   errorMessage = '';
 
@@ -60,7 +60,7 @@ export class CategoryManagementComponent implements OnInit {
     });
   }
 
-  // Iniciar edición
+  // Start editing
   startEdit(category: Category): void {
     this.editingCategory = category;
     this.editedName = category.name;
@@ -69,14 +69,14 @@ export class CategoryManagementComponent implements OnInit {
     this.errorMessage = '';
   }
 
-  // Cancelar edición
+  // Cancel edit
   cancelEdit(): void {
     this.editingCategory = null;
     this.editedName = '';
     this.isEditing = false;
   }
 
-  // Guardar edición
+  // Save edit
   saveEdit(): void {
     if (!this.editingCategory || !this.editingCategory.id) {
       return;

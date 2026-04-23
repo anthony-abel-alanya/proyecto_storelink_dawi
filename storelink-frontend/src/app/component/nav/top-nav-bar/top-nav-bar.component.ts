@@ -45,18 +45,18 @@ export class TopNavBarComponent {
     return Object.values(this.cart).reduce((total, qty) => total + qty, 0);
   }
 
-  // Obtener email del usuario desde el token
+  // Get user's email from the token
   getUserEmail(): string {
     return this.authService.getEmail() || '';
   }
 
-  // Obtener el nombre del usuario (sin @domain.com)
+  // Get user's name (without @domain.com)
   getUserName(): string {
     const email = this.getUserEmail();
     return email ? email.split('@')[0] : 'Usuario';
   }
 
-  // Obtener el rol del usuario
+  // Get the user role
   getUserRole(): string {
     const role = this.authService.getRole();
     if (role && role.includes('ADMIN')) {

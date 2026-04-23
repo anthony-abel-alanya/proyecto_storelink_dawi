@@ -18,15 +18,15 @@ import { CategoryService } from 'src/app/service/category/category.service';
   styleUrls: ['./homepage.component.css'],
 })
 export class HomepageComponent implements OnInit {
-  // Todos los productos
+  // All products
   products: Product[] = [];
-  // Productos filtrados para mostrar
+  // Filtered products for display
   filteredProducts: Product[] = [];
-  // Promociones activas
+  // Active promotions
   promotions: CategoryPromotion[] = [];
-  // Lista de categorías para el filtro
+  // List of categories for the filter
   categories: Category[] = [];
-  // Carrito
+  // Shopping cart
   cart: {
     [productId: number]: {
       quantity: number;
@@ -34,7 +34,7 @@ export class HomepageComponent implements OnInit {
     };
   } = {};
 
-  // Variables de filtros
+  // Filter variables
   searchTerm = '';
   filterCategory = '';
   filterPriceMin: number | null = null;
@@ -42,7 +42,7 @@ export class HomepageComponent implements OnInit {
   filterStockMin: number | null = null;
   filterStockMax: number | null = null;
 
-  // PAGINACIÓN
+  // PAGINATION
   currentPage = 1;
   pageSize = 9; // puedes usar 6, 9 o 12
   totalItems = 0;
@@ -93,28 +93,28 @@ export class HomepageComponent implements OnInit {
     });
   }
 
-  // Aplicar filtros en tiempo real
+  // Apply filters in real-time
   applyFilters(): void {
     this.filteredProducts = this.products.filter((product) => {
-      // Filtro por nombre (búsqueda parcial, case-insensitive)
+      // Filter by name (partial search, case-insensitive)
       const matchesName =
         !this.searchTerm ||
         product.productName.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
         (product.author && product.author.toLowerCase().includes(this.searchTerm.toLowerCase()));
 
-      // Filtro por categoría
+      // Filter by category
       const matchesCategory =
         !this.filterCategory ||
         product.categoryName?.toLowerCase() === this.filterCategory.toLowerCase();
 
-      // Filtro por rango de precio
+      // Filter by price range
       const matchesPriceMin =
         this.filterPriceMin === null || product.price >= this.filterPriceMin;
       const matchesPriceMax =
         this.filterPriceMax === null || product.price <= this.filterPriceMax;
       const matchesPrice = matchesPriceMin && matchesPriceMax;
 
-      // Filtro por rango de stock
+      // Filter by stock range
       const matchesStockMin =
         this.filterStockMin === null || product.quantity >= this.filterStockMin;
       const matchesStockMax =
@@ -124,7 +124,7 @@ export class HomepageComponent implements OnInit {
       return matchesName && matchesCategory && matchesPrice && matchesStock;
     });
 
-    // 🔥 IMPORTANTE: reset paginación
+    // IMPORTANT: reset paginación
     this.currentPage = 1;
     this.updatePagination();
   }
@@ -165,7 +165,7 @@ export class HomepageComponent implements OnInit {
     return pages;
   }
 
-  // Limpiar todos los filtros
+  // Clear all filters
   clearFilters(): void {
     this.searchTerm = '';
     this.filterCategory = '';

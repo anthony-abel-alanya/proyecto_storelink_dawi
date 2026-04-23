@@ -20,7 +20,7 @@ export class ProductDetailComponent implements OnInit {
   loading = true;
   errorMessage = '';
 
-  // Carrito
+  // cart
   cart: {
     [productId: number]: {
       quantity: number;

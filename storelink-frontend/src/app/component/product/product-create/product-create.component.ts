@@ -34,12 +34,12 @@ export class ProductCreateComponent implements OnInit {
 
   constructor(private productService: ProductService, private categoryService: CategoryService) {}
 
-  // el ngOnInit para cargar las categorías al abrir el formulario
+  // Use ngOnInit to load the categories when the form opens
   ngOnInit(): void {
     this.loadCategories();
   }
 
-  // Método para traer las categorías de la tabla de promociones
+  // Method for retrieving categories from the promotions table
   loadCategories(): void {
     this.categoryService.getCategories().subscribe({
       next: (data) => {
@@ -76,7 +76,7 @@ export class ProductCreateComponent implements OnInit {
           imageUrl: '',
           categoryId: 0,
         };
-        // Opcional: recargar categorías 
+        // Optional: Reload categories 
         this.loadCategories(); 
       },
       error: (err) => {

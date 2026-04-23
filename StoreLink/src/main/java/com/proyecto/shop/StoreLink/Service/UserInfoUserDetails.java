@@ -47,7 +47,7 @@ public class UserInfoUserDetails implements UserDetails {
         return enabled;
     }
 
-    // Spring Security también necesita isAccountNonLocked() y isAccountNonExpired()
+    // Spring Security also needs  isAccountNonLocked() y isAccountNonExpired()
     @Override
     public boolean isAccountNonLocked() {
         return enabled;

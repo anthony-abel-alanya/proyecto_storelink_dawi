@@ -105,7 +105,7 @@ public class ProductController {
         return ResponseEntity.noContent().build(); // 204 No Content
     }
     
-    // Endpoint para obtener la lista de categorías únicas de la base de datos
+    // Endpoint to obtain the list of unique categories from the database
     @GetMapping("/categories")
     public ResponseEntity<List<String>> getCategories() {
         logger.info("Fetching unique categories for selection...");

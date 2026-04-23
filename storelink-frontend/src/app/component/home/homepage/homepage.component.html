@@ -1,16 +1,12 @@
 <div class="container py-4">
 
-  <!-- ================================= -->
-  <!-- TÍTULO BIENVENIDA -->
-  <!-- ================================= -->
+  <!-- WELCOME TITLE -->
   <div class="text-center mb-4">
     <h1 class="fw-bold text-primary">Descubre tu próxima historia en StoreLink</h1>
     <p class="text-muted">Explora nuestro catálogo y encuentra tu próxima lectura favorita</p>
   </div>
 
-  <!-- ================================= -->
-  <!-- FILTROS -->
-  <!-- ================================= -->
+  <!-- FILTERS -->
   <div class="card border-0 shadow-sm mb-4">
 
     <div class="card-header bg-primary text-white">
@@ -74,9 +70,7 @@
     </div>
   </div>
 
-  <!-- ================================= -->
-  <!-- GRID PRODUCTOS -->
-  <!-- ================================= -->
+  <!-- PRODUCTS GRID -->
   <div class="row g-4">
 
     <div *ngFor="let product of paginatedProducts" class="col-12 col-md-6 col-lg-4">
@@ -160,9 +154,7 @@
 
   </div>
 
-  <!-- ================================= -->
-  <!-- PAGINACIÓN -->
-  <!-- ================================= -->
+  <!-- PAGINATION -->
   <div class="card border-0 shadow-sm mt-4" *ngIf="totalPages > 1">
 
     <div class="card-body">

@@ -1,8 +1,6 @@
 <div class="container py-5">
 
-  <!-- ================================= -->
   <!-- LOADING -->
-  <!-- ================================= -->
   <div *ngIf="loading" class="text-center py-5">
 
     <div class="spinner-border text-primary mb-3"></div>
@@ -10,16 +8,12 @@
 
   </div>
 
-  <!-- ================================= -->
   <!-- ERROR -->
-  <!-- ================================= -->
   <div *ngIf="errorMessage" class="alert alert-danger text-center shadow-sm">
     {{ errorMessage }}
   </div>
 
-  <!-- ================================= -->
   <!-- PRODUCT DETAIL -->
-  <!-- ================================= -->
   <div *ngIf="!loading && product" class="row g-4">
 
     <!-- IMAGE -->

@@ -1,16 +1,12 @@
 <div class="container py-5">
 
-  <!-- ============================================ -->
   <!-- HEADER -->
-  <!-- ============================================ -->
   <div class="text-center mb-4">
     <h2 class="fw-bold mb-1">Gestión de Productos</h2>
     <p class="text-muted mb-0">Administra productos, filtros y edición en un solo lugar</p>
   </div>
 
-  <!-- ============================================ -->
-  <!-- ALERTAS -->
-  <!-- ============================================ -->
+  <!-- ALERTS -->
   <div class="row justify-content-center mb-3">
     <div class="col-lg-10">
 
@@ -30,9 +26,7 @@
   <div class="row justify-content-center">
     <div class="col-lg-10">
 
-      <!-- ============================================ -->
-      <!-- FILTROS -->
-      <!-- ============================================ -->
+      <!-- FILTERS -->
       <div class="card border-0 shadow-sm mb-4">
         <div class="card-header bg-primary text-white">
           <h5 class="mb-0">🔎 Filtros de búsqueda</h5>
@@ -65,7 +59,7 @@
               </div>
             </div>
 
-            <!-- Rango de stock -->
+            <!-- Stock range -->
             <div class="col-md-3">
               <label class="form-label">Stock</label>
               <div class="input-group">
@@ -92,9 +86,7 @@
         </div>
       </div>
 
-      <!-- ============================================ -->
-      <!-- TABLA -->
-      <!-- ============================================ -->
+      <!-- TABLE -->
       <div class="card border-0 shadow-sm">
 
         <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
@@ -168,7 +160,7 @@
 
         </div>
 
-        <!-- PAGINACIÓN -->
+        <!-- PAGINATION -->
         <div class="card-footer bg-white" *ngIf="totalPages > 1">
 
           <nav>
@@ -197,10 +189,8 @@
 
       </div>
 
-      <!-- ============================================ -->
-      <!-- FORMULARIO EDICIÓN -->
-      <!-- ============================================ -->
-      <div *ngIf="selectedProduct" class="card border-primary shadow-sm mt-4">
+      <!-- EDITING FORM -->
+      <div *ngIf="selectedProduct" id="edit-form" class="card border-primary shadow-sm mt-4">
 
         <div class="card-header bg-primary text-white">
           ✏ Editando producto: <strong>{{ selectedProduct.productName }}</strong>
@@ -212,9 +202,7 @@
 
             <div class="row g-4">
 
-              <!-- ================================= -->
-              <!-- FORM CAMPOS -->
-              <!-- ================================= -->
+              <!-- FORM FIELDS -->
               <div class="col-lg-8">
 
                 <div class="row g-3">
@@ -243,7 +231,7 @@
                     <input type="number" class="form-control" [(ngModel)]="selectedProduct.quantity" name="quantity">
                   </div>
 
-                  <!-- DESCRIPCIÓN (NUEVO) -->
+                  <!-- DESCRIPTION (NEW) -->
                   <div class="col-12">
                     <label class="form-label">Descripción</label>
                     <textarea class="form-control" rows="3" [(ngModel)]="selectedProduct.description"
@@ -251,14 +239,14 @@
               </textarea>
                   </div>
 
-                  <!-- AUTOR -->
+                  <!-- AUTHOR -->
                   <div class="col-12">
                     <label class="form-label">Autor</label>
                     <input class="form-control" [(ngModel)]="selectedProduct.author" name="author"
                       placeholder="Nombre del autor del libro">
                   </div>
 
-                  <!-- URL IMAGEN -->
+                  <!-- URL IMAGE -->
                   <div class="col-12">
                     <label class="form-label">Imagen (URL)</label>
                     <input class="form-control" [(ngModel)]="selectedProduct.imageUrl" name="imageUrl">
@@ -268,9 +256,7 @@
 
               </div>
 
-              <!-- ================================= -->
-              <!-- PREVIEW IMAGEN -->
-              <!-- ================================= -->
+              <!-- PREVIEW IMAGE -->
               <div class="col-lg-4 text-center">
 
                 <label class="form-label d-block">Vista previa</label>
@@ -291,9 +277,7 @@
 
             </div>
 
-            <!-- ================================= -->
-            <!-- BOTONES -->
-            <!-- ================================= -->
+            <!-- BUTTONS -->
             <div class="d-flex gap-2 mt-4">
 
               <button class="btn btn-success w-100">

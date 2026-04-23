@@ -46,7 +46,7 @@ export class ProductService {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
 
-  // Método para obtener las categorías únicas desde el backend
+  // Method to obtain unique categories from the backend
   getCategories(): Observable<Category[]> {
     return this.http.get<Category[]>(`${this.baseUrl}/categories`);
   }
